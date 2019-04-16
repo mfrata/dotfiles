@@ -11,7 +11,11 @@ set tabstop=2     " tabs = 2 columns
 set shiftwidth=2  " 2 columns identation keys
 set expandtab     " tabs = spaces (youtube.com/watch?v=SsoOG6ZeyUI)
 set laststatus=2  " Used by lightline
-set shell=zsh
+set shell=zsh     " Oh my sweet shell
+
+colorscheme focuspoint
+"hi Normal guibg=NONE ctermbg=NONE
+
 "---- Mappings ----"
 
 let mapleader = ","
@@ -31,6 +35,9 @@ nnoremap <leader>c :BCommits<CR>
 " ripgrep "
 nnoremap <leader>r :Rg
 
+" ripgrep "
+nnoremap <leader>f :Rgrep
+
 " NERDTree toggle
 map <C-t> :NERDTreeToggle<CR>
 
@@ -40,12 +47,29 @@ nnoremap <leader>x :registers<CR>
 " Terminal "
 nnoremap <leader>t :terminal<CR>
 
+" don't highlight next search and clear the window
+nnoremap <C-l> :nohlsearch<CR><C-l>
+
+" easier window navigation
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
+
 "---- Commands ----"
 
-"-- ripgrep -- $ sudo apt install ripgrep"
+"-- ripgrep --" 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --line-number --no-heading --hidden --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+\ <bang>0)
+
+"-- rgrep --"
+command! -bang -nargs=* Rgrep
+  \ call fzf#vim#grep(
+  \   'rgrep --line-number --color=always -I '.shellescape(<q-args>), 1,
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
 \ <bang>0)
@@ -89,7 +113,10 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 
 "- Multiple Cursors -"
-Plug 'terryma/vim-multiple-cursors'
+"Plug 'terryma/vim-multiple-cursors'
+
+" https://github.com/chase/focuspoint-vim
+Plug 'chase/focuspoint-vim'
 
 call plug#end()
 
