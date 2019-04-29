@@ -115,6 +115,9 @@ Plug 'tpope/vim-fugitive'
 "- Multiple Cursors -"
 "Plug 'terryma/vim-multiple-cursors'
 
+"- Directories Diff -"
+Plug 'will133/vim-dirdiff'
+
 " https://github.com/chase/focuspoint-vim
 Plug 'chase/focuspoint-vim'
 
