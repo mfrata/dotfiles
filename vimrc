@@ -1,17 +1,18 @@
 "---- Settings ----"
-set showcmd       " Show me what I'm typing
-set number        " Show line numbers
-set noswapfile    " Don't use swapfile
-set nobackup      " Don't create annoying backup files
-set incsearch     " Shows the match while typing
-set hlsearch      " Highlight found searches
-set ignorecase    " Search case insensitive...
-set smartcase     " ... but not it begins with upper case
-set tabstop=2     " tabs = 2 columns
-set shiftwidth=2  " 2 columns identation keys
-set expandtab     " tabs = spaces (youtube.com/watch?v=SsoOG6ZeyUI)
-set laststatus=2  " Used by lightline
-set shell=zsh     " Oh my sweet shell
+set showcmd            " Show me what I'm typing
+set number             " Show line numbers
+set noswapfile         " Don't use swapfile
+set nobackup           " Don't create annoying backup files
+set incsearch          " Shows the match while typing
+set hlsearch           " Highlight found searches
+set ignorecase         " Search case insensitive...
+set smartcase          " ... but not it begins with upper case
+set tabstop=2          " tabs = 2 columns
+set shiftwidth=2       " 2 columns identation keys
+set expandtab          " tabs = spaces (youtube.com/watch?v=SsoOG6ZeyUI)
+set laststatus=2       " Used by lightline
+set shell=zsh          " Oh my sweet shell
+set diffopt+=vertical  " Fugitive Gdiff
 
 colorscheme focuspoint
 "hi Normal guibg=NONE ctermbg=NONE
@@ -49,6 +50,9 @@ nnoremap <leader>t :terminal<CR>
 
 " don't highlight next search and clear the window
 nnoremap <C-l> :nohlsearch<CR><C-l>
+
+" toggle Rainbow Highlight
+nnoremap <C-]> :RainbowToggle<CR><C-l>
 
 " easier window navigation
 nnoremap <A-h> <C-w>h
@@ -114,6 +118,9 @@ Plug 'tpope/vim-fugitive'
 
 "- Multiple Cursors -"
 "Plug 'terryma/vim-multiple-cursors'
+
+"- Same color Open/Close brackets/parenthesis/squareBrackets
+Plug 'luochen1990/rainbow'
 
 "- Directories Diff -"
 Plug 'will133/vim-dirdiff'
