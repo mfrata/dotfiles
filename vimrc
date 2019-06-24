@@ -34,10 +34,7 @@ nnoremap <leader>w :Windows<CR>
 nnoremap <leader>c :BCommits<CR>
 
 " ripgrep "
-nnoremap <leader>r :Rg
-
-" ripgrep "
-nnoremap <leader>f :Rgrep
+nnoremap <leader>r :Rg<space>
 
 " NERDTree toggle
 map <C-t> :NERDTreeToggle<CR>
@@ -62,27 +59,8 @@ nnoremap <A-l> <C-w>l
 
 "---- Commands ----"
 
-"-- ripgrep --" 
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --line-number --no-heading --hidden --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-\ <bang>0)
-
-"-- rgrep --"
-command! -bang -nargs=* Rgrep
-  \ call fzf#vim#grep(
-  \   'rgrep --line-number --color=always -I '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-\ <bang>0)
-
 "-- Closes vim when NERDTree is the only window left "
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-
-"---- Plugins ----"
 
 "-- Auto install -- $ sudo apt install curl"
 if empty(glob('~/.vim/autoload/plug.vim'))
