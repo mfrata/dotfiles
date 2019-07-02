@@ -14,7 +14,7 @@ set laststatus=2       " Used by lightline
 set shell=zsh          " Oh my sweet shell
 set diffopt+=vertical  " Fugitive Gdiff
 
-colorscheme focuspoint
+" colorscheme focuspoint
 "hi Normal guibg=NONE ctermbg=NONE
 
 "---- Mappings ----"

@@ -1,0 +1,20 @@
+[user]
+  email = matheus.frata@gmail.com 
+  name = Matheus Frata
+[core]
+  editor = vim
+[alias]
+  tree = log --oneline --graph --decorate
+  unstage = reset HEAD --
+  discard = checkout
+  ignore = update-index --assume-unchanged
+  unignore = update-index --no-assume-unchanged
+  ignored = ls-files -v | grep ^[a-z]
+  liststaged = diff --name-only --cached
+  root = rev-parse --show-toplevel
+  uncommit = reset HEAD^
+  alias = config --get-regexp ^alias\\.
+  whereiam = rev-parse --abbrev-ref HEAD
+  upstream = rev-parse --abbrev-ref --symbolic-full-name @{u}
+  restore = "!git checkout $(git upstream) -- #@"
+

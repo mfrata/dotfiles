@@ -1,7 +1,7 @@
 ## General Aliases ##
 
 ## Current company aliases ##
-source ~/.certi_aliases
+source ~/.work_aliases
 
 ## Ubuntu default ##
 
