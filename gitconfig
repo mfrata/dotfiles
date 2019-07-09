@@ -3,7 +3,8 @@
 [core]
   editor = vim
 [alias]
-  tree = log --graph --pretty=format:"%C(yellow)%h%Creset%C(cyan)%C(bold)%d%Creset %C(cyan)(%cr)%Creset %C(green)%ce%Creset %s"
+  tree = log --graph --pretty=format:'%C(yellow)%h%Creset%C(cyan)%C(bold)%d%Creset %C(cyan)(%cr)%Creset %C(green)%cn%Creset %s'
+  tree2 = log --graph --pretty=format:'%C(yellow)%h%Creset%C(cyan)%C(bold)%d%Creset %C(cyan)(%cD)%Creset %C(green)%ce%Creset %s'
   unstage = reset HEAD --
   discard = checkout
   ignore = update-index --assume-unchanged
