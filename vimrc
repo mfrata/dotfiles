@@ -97,6 +97,9 @@ Plug 'tpope/vim-fugitive'
 "- Multiple Cursors -"
 "Plug 'terryma/vim-multiple-cursors'
 
+"- Markdown preview -"
+Plug 'iamcco/markdown-preview.vim'
+
 "- Same color Open/Close brackets/parenthesis/squareBrackets
 Plug 'luochen1990/rainbow'
 
