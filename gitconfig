@@ -1,10 +1,9 @@
 [user]
-  email = matheus.frata@gmail.com 
   name = Matheus Frata
 [core]
   editor = vim
 [alias]
-  tree = log --oneline --graph --decorate
+  tree = log --graph --pretty=format:"%C(yellow)%h%Creset%C(cyan)%C(bold)%d%Creset %C(cyan)(%cr)%Creset %C(green)%ce%Creset %s"
   unstage = reset HEAD --
   discard = checkout
   ignore = update-index --assume-unchanged
