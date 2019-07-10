@@ -14,7 +14,7 @@ set laststatus=2       " Used by lightline
 set shell=zsh          " Oh my sweet shell
 set diffopt+=vertical  " Fugitive Gdiff
 
-" colorscheme focuspoint
+colorscheme focuspoint
 "hi Normal guibg=NONE ctermbg=NONE
 
 "---- Mappings ----"
@@ -67,6 +67,9 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall | source $MYVIMRC
+  " install focuspoint color theme
+  silent !cp ~/.vim/bundle/focuspoint-vim/colors/focuspoint.vim
+    \ /usr/share/vim/vim80/colors
 endif
 
 call plug#begin('~/.vim/bundle')
