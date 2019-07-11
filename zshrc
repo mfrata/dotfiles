@@ -97,4 +97,6 @@ source $ZSH/oh-my-zsh.sh
 #
 source $HOME/.bash_aliases
 
+zstyle ':completion:*' rehash true
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
