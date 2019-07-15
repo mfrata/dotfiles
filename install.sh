@@ -27,6 +27,7 @@ install_ openvpn
 install_ python3
 install_ python3-pip
 install_ tree
+install_ chromium-browser
 
 # ripgrep
 if [ ! is_installed_ ripgrep ] then;
@@ -86,3 +87,4 @@ fi
 
 # Aws cli
 pip3 install awscli --upgrade --user
+sudo apt install gnome-tweaks
