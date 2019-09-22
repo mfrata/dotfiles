@@ -9,7 +9,7 @@
   discard = checkout
   ignore = update-index --assume-unchanged
   unignore = update-index --no-assume-unchanged
-  ignored = ls-files -v | grep ^[a-z]
+  ignored = "!git ls-files -v | grep ^h | cut -d ' ' -f 2"
   liststaged = diff --name-only --cached
   root = rev-parse --show-toplevel
   uncommit = reset HEAD^
