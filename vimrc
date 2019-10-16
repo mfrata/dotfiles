@@ -67,9 +67,13 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall | source $MYVIMRC
-  " install focuspoint color theme
-  silent !cp ~/.vim/bundle/focuspoint-vim/colors/focuspoint.vim
-    \ /usr/share/vim/vim80/colors
+endif
+
+" install focuspoint color theme
+if empty(glob('~/.vim/colors/focuspoint.vim'))
+  silent !curl -fLo ~/.vim/colors/focuspoint.vim --create-dirs
+    \ https://raw.githubusercontent.com/chase/focuspoint-vim/master/colors/focuspoint.vim
+  autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
 call plug#begin('~/.vim/bundle')
