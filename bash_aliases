@@ -23,6 +23,11 @@ alias gcm='git commit'
 
 alias cdroot='cd $(git root)'
 
+function get_commit_hash()
+{
+  git tree | grep -E ${1} | cut -d ' ' -f2 | xclip -i -selection clipboard
+}
+
 ## Vim
 
 alias vimf='vim $(fzf)'
@@ -35,6 +40,10 @@ function dirdiff()
     DIR1=$(printf '%q' "$1"); shift
     DIR2=$(printf '%q' "$1"); shift
     vim $@ -c "DirDiff $DIR1 $DIR2"
+}
+
+function remove_trailing_spaces {
+    sed -i 's/[ \t]*$//' ${1}
 }
 
 
