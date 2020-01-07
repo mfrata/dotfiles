@@ -116,5 +116,10 @@ Plug 'will133/vim-dirdiff'
 " https://github.com/chase/focuspoint-vim
 Plug 'chase/focuspoint-vim'
 
+
+Plug 'editorconfig/editorconfig-vim'
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
+
 call plug#end()
 
