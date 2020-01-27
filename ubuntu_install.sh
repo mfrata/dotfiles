@@ -73,7 +73,7 @@ extra_install() {
   sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   
   # Dropbox
-  wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf - &&
+  wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 }
 
 main () {
