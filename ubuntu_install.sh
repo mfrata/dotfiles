@@ -2,10 +2,16 @@
 
 install_pre_prerequisites() {
   # These are prerequisite for the add_apt_repos
-  apt_install curl
-  apt_install apt-transport-https 
-  apt_install ca-certificates
-  apt_install software-properties-common
+  PREPACKAGES="
+    curl \
+    apt-transport-https \
+    ca-certificates \
+    software-properties-common \
+    gnupg \
+  "
+  for PREPACKAGE in ${PREPACKAGES}; do
+    sudo apt install -y ${PREPACKAGE};
+  done
 }
 
 add_apt_repos() {
@@ -16,6 +22,16 @@ add_apt_repos() {
   # Docker
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+  
+  # K8s
+  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+  echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+  
+  # Gcloud
+  echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" \
+    | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+    | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
 }
 
 post_install() {
@@ -55,6 +71,9 @@ extra_install() {
   sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   sudo chmod +x /usr/local/bin/docker-compose
   sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  
+  # Dropbox
+  wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf - &&
 }
 
 main () {
@@ -81,6 +100,9 @@ main () {
     gnome-tweaks \
     spotify-client \
     docker-ce \
+    kubectl \
+    google-cloud-sdk \
+    keepassxc \
   "
   for PACKAGE in ${PACKAGES}; do
     sudo apt install -y ${PACKAGE};
@@ -92,7 +114,10 @@ main () {
 
   post_install
 
-  echo "Done!"
+  echo "Two more things..."
+  echo "Install finish installing dropbox by running:"
+  echo "~/.dropbox-dist/dropboxd"
+  echo "Start the google cloud: `gcloud init`"
 }
 
 main
