@@ -1,16 +1,4 @@
-
-is_dpkg_installed() {
-  return $(dpkg-query -W -f='${Status}' ${1} 2>/dev/null | grep -c "ok installed")
-}
-
-apt_install() {
-  if [ ! is_installed_ ${1} ]; then
-    sudo apt install -y ${1};
-  else
-    echo "${1} is already installed. Skipping..."
-  fi   
-}
-
+#!/bin/bash
 
 install_pre_prerequisites() {
   # These are prerequisite for the add_apt_repos
@@ -33,7 +21,6 @@ add_apt_repos() {
 post_install() {
   # Docker without sudo
   sudo usermod -aG docker ${USER}
-  su - ${USER};
 }
 
 create_dirs_n_files() {
@@ -68,9 +55,6 @@ extra_install() {
   sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
   sudo chmod +x /usr/local/bin/docker-compose
   sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-  
-  # Aws cli
-  pip3 install awscli --upgrade --user
 }
 
 main () {
@@ -99,7 +83,7 @@ main () {
     docker-ce \
   "
   for PACKAGE in ${PACKAGES}; do
-    apt_install ${PACKAGE};
+    sudo apt install -y ${PACKAGE};
   done
 
   create_dirs_n_files
@@ -112,5 +96,3 @@ main () {
 }
 
 main
-
-
