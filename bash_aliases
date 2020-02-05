@@ -49,3 +49,6 @@ function remove_trailing_spaces {
 # Docker
 alias docker_clean_images='docker rmi $(docker images -a --filter=dangling=true -q)'
 alias docker_clean_ps='docker rm $(docker ps --filter=status=exited --filter=status=created -q)'
+
+alias venv_create='virtualenv -p python3 .venv'
+alias venv_activate='source .venv/bin/activate'
