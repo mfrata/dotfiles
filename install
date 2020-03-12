@@ -46,9 +46,9 @@ create_dirs_n_files() {
   fi
   
   # dotfiles
-  if [ ! -d ~/code/dotfiles ]; then
-    git clone https://github.com/mfrata/dotfiles.git code/dotfiles
-    make -C code/dotfiles install
+  if [ ! -d ~/.dotfiles ]; then
+    git clone https://github.com/mfrata/dotfiles.git .dotfiles
+    make -C ~/.dotfiles install
   fi
   
   # company aliases
@@ -97,7 +97,6 @@ main () {
     tree \
     chromium-browser \
     jq \
-    gnome-tweaks \
     spotify-client \
     docker-ce \
     kubectl \
