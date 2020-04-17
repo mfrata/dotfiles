@@ -119,6 +119,12 @@ function sp-current {
   | column -t -s'|'
 }
 
+function sp-current-oneline {
+  TITLE=$(sp-metadata | grep -e 'title|' | cut -d '|' -f 2)
+  ARTIST=$(sp-metadata | grep -e 'artist|' | cut -d '|' -f 2)
+  echo "$TITLE - ${ARTIST}"
+}
+
 function sp-eval {
   # Prints the currently playing track as shell variables, ready to be eval'ed
   require sort
