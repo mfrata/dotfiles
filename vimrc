@@ -51,7 +51,7 @@ nnoremap <C-l> :nohlsearch<CR><C-l>
 " toggle Rainbow Highlight
 nnoremap <C-]> :RainbowToggle<CR><C-l>
 
-" easier window navigation
+" eaier window navigation
 nnoremap <A-h> <C-w>h
 nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
@@ -76,9 +76,15 @@ if empty(glob('~/.vim/colors/focuspoint.vim'))
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --line-number --no-heading --hidden --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \ <bang>0)
+
 call plug#begin('~/.vim/bundle')
 
-"- FZF -"
 let g:fzf_install = 'yes | ./install'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': g:fzf_install }
 Plug 'junegunn/fzf.vim'
@@ -87,39 +93,29 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-"- lightline -"
 Plug 'itchyny/lightline.vim'
 let g:lightline = {'colorscheme': 'jellybeans'}
-" TODO improve lightline formating
 
-"- NERDTree -"
 Plug 'scrooloose/nerdtree'
 
-"- Vim Surround-"
 Plug 'tpope/vim-surround'
 
-"- Fugitive -"
 Plug 'tpope/vim-fugitive'
 
-"- Multiple Cursors -"
-"Plug 'terryma/vim-multiple-cursors'
-
-"- Markdown preview -"
 Plug 'iamcco/markdown-preview.vim'
 
-"- Same color Open/Close brackets/parenthesis/squareBrackets
 Plug 'luochen1990/rainbow'
 
-"- Directories Diff -"
 Plug 'will133/vim-dirdiff'
 
-" https://github.com/chase/focuspoint-vim
 Plug 'chase/focuspoint-vim'
 
+Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'derekwyatt/vim-scala'
+au BufRead,BufNewFile *.sbt set filetype=scala
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
-
 call plug#end()
-

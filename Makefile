@@ -16,3 +16,7 @@ link:
 	ln -s ~/.dotfiles/bash_aliases ~/.bash_aliases
 	ln -s ~/.dotfiles/tmux.conf ~/.tmux.conf
 	ln -s ~/.dotfiles/gitconfig ~/.gitconfig
+
+set_shell:
+	echo "export SHELL=/bin/zsh" >> ~/.bashrc
+	echo "exec /bin/zsh -l" >> ~/.bashrc
