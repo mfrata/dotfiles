@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+function statusbar-battery_perc {
+  BATTERY_PERCENTAGE="$( \
+    upower -i /org/freedesktop/UPower/devices/battery_BAT0 \
+    | grep percentage \
+    | cut -d ':' -f 2 \
+    | tr -d ' ')"
+
+  echo "♥ ${BATTERY_PERCENTAGE}"
+}
+
+function statusbar-current_song {
+  SPOTIFY_PID="$(pidof -s spotify || pidof -s .spotify-wrapped)"
+
+  if [[ -z "$SPOTIFY_PID" ]]; then
+    echo " "
+  else
+    TITLE=$(~/.dotfiles/bin/sp metadata | grep -e 'title|' | cut -d '|' -f 2)
+    ARTIST=$(~/.dotfiles/bin/sp metadata | grep -e 'artist|' | cut -d '|' -f 2)
+    echo "♫ ${TITLE} - ${ARTIST}"
+  fi
+}
+
+function statusbar-mem_usage {
+  AVAILABLE=$(free | grep Mem | awk '{print $3/$2 * 100.0}')
+  printf "%i%%" ${AVAILABLE}
+}
+
+subcommand="$1"
+
+if $(type statusbar-$subcommand > /dev/null 2> /dev/null); then
+  # It is. Run it.
+  shift
+  eval "statusbar-$subcommand $@"
+else
+  # It's not. Try a search.
+  echo "Unknown command $subcommand."
+  exit 1
+fi
