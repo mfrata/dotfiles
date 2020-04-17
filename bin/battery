@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# SHELL OPTIONS
+
+shopt -s expand_aliases
+
+function battery-help {
+  # Prints usage information.
+
+  echo "Usage: battery [command]"
+  echo "Simple helper to get battery information."
+  echo ""
+  echo "  battery perc  - Show current battery percentage"
+  echo "  battery help  - Show this message"
+}
+
+function battery-perc {
+  echo "$( \
+    upower -i /org/freedesktop/UPower/devices/battery_BAT0 \
+    | grep percentage \
+    | cut -d ':' -f 2 \
+    | tr -d ' ')"
+}
+
+subcommand="$1"
+
+if [[ -z "$subcommand" ]]; then
+  # No arguments given, print help.
+  battery-help
+else
+  # Arguments given, check if it's a command.
+  if $(type battery-$subcommand > /dev/null 2> /dev/null); then
+    # It is. Run it.
+    shift
+    eval "battery-$subcommand $@"
+  else
+    # It's not. Try a search.
+    echo "Unknown command $subcommand. Try 'help' for more info"
+    exit 1
+  fi
+fi
