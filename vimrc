@@ -15,7 +15,7 @@ set shell=zsh          " Oh my sweet shell
 set diffopt+=vertical  " Fugitive Gdiff
 
 colorscheme focuspoint
-"hi Normal guibg=NONE ctermbg=NONE
+hi Normal guibg=NONE ctermbg=NONE
 
 "---- Mappings ----"
 
@@ -104,16 +104,9 @@ Plug 'tpope/vim-fugitive'
 
 Plug 'iamcco/markdown-preview.vim'
 
-Plug 'luochen1990/rainbow'
-
 Plug 'will133/vim-dirdiff'
 
 Plug 'chase/focuspoint-vim'
-
-Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
-"Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'derekwyatt/vim-scala'
-au BufRead,BufNewFile *.sbt set filetype=scala
 
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
