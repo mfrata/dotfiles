@@ -8,6 +8,7 @@ rm:
 	rm ~/.bash_aliases
 	rm ~/.tmux.conf
 	rm ~/.gitconfig
+	rm ~/.config/nvim/init.vim
 
 .PHONY: link
 link:
@@ -16,6 +17,7 @@ link:
 	ln -s ~/.dotfiles/bash_aliases ~/.bash_aliases
 	ln -s ~/.dotfiles/tmux.conf ~/.tmux.conf
 	ln -s ~/.dotfiles/gitconfig ~/.gitconfig
+	ln -s ~/.dotfiles/init.vim ~/.config/nvim/init.vim
 
 set_shell:
 	echo "export SHELL=/bin/zsh" >> ~/.bashrc
