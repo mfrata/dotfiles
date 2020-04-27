@@ -76,13 +76,6 @@ if empty(glob('~/.vim/colors/focuspoint.vim'))
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --line-number --no-heading --hidden --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \ <bang>0)
-
 call plug#begin('~/.vim/bundle')
 
 let g:fzf_install = 'yes | ./install'
