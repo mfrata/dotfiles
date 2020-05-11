@@ -15,7 +15,7 @@ link:
 	ln -s ~/.dotfiles/vimrc ~/.vimrc
 	ln -s ~/.dotfiles/zshrc ~/.zshrc
 	ln -s ~/.dotfiles/bash_aliases ~/.bash_aliases
-	ln -s ~/.dotfiles/tmux.conf ~/.tmux.conf
+	ln -s ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
 	ln -s ~/.dotfiles/gitconfig ~/.gitconfig
 	ln -s ~/.dotfiles/init.vim ~/.config/nvim/init.vim
 
