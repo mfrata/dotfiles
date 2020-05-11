@@ -104,4 +104,7 @@ Plug 'chase/focuspoint-vim'
 Plug 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+
 call plug#end()
