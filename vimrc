@@ -1,4 +1,5 @@
 "---- Settings ----"
+
 set showcmd            " Show me what I'm typing
 set number             " Show line numbers
 set noswapfile         " Don't use swapfile
@@ -6,44 +7,32 @@ set nobackup           " Don't create annoying backup files
 set incsearch          " Shows the match while typing
 set hlsearch           " Highlight found searches
 set ignorecase         " Search case insensitive...
-set smartcase          " ... but not it begins with upper case
+set smartcase          " ... but not if begins with upper case
 set tabstop=2          " tabs = 2 columns
 set shiftwidth=2       " 2 columns identation keys
 set expandtab          " tabs = spaces (youtube.com/watch?v=SsoOG6ZeyUI)
 set laststatus=2       " Used by lightline
 set shell=zsh          " Oh my sweet shell
 set diffopt+=vertical  " Fugitive Gdiff
+set relativenumber     " Relative line number
 
 colorscheme focuspoint
-hi Normal guibg=NONE ctermbg=NONE
+
 
 "---- Mappings ----"
 
-" Disable Arrow keys in Escape mode
-map <up> <nop>
-map <down> <nop>
-map <left> <nop>
-map <right> <nop>
-
-" Disable Arrow keys in Insert mode
-imap <up> <nop>
-imap <down> <nop>
-imap <left> <nop>
-imap <right> <nop>
-
-
 let mapleader = ","
 
-" fzf
+" fzf search
 nnoremap <leader><leader> :Files<CR>
 
-" buffers
+" Buffers
 nnoremap <leader><Enter> :Buffers<CR>
 
 " Tabs
 nnoremap <leader>w :Windows<CR>
 
-" commits of file
+" Commits of file
 nnoremap <leader>c :BCommits<CR>
 
 " ripgrep "
@@ -58,17 +47,30 @@ nnoremap <leader>x :registers<CR>
 " Terminal "
 nnoremap <leader>t :terminal<CR>
 
-" don't highlight next search and clear the window
+" Don't highlight next search and clear the window
 nnoremap <C-l> :nohlsearch<CR><C-l>
 
-" toggle Rainbow Highlight
+" Toggle Rainbow Highlight
 nnoremap <C-]> :RainbowToggle<CR><C-l>
 
-" eaier window navigation
+" Easier window navigation
 nnoremap <A-h> <C-w>h
 nnoremap <A-j> <C-w>j
 nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
+
+" Disable Arrow keys in Escape mode
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+
+" Disable Arrow keys in Insert mode
+imap <up> <nop>
+imap <down> <nop>
+imap <left> <nop>
+imap <right> <nop>
+
 
 "---- Commands ----"
 
@@ -89,35 +91,43 @@ if empty(glob('~/.vim/colors/focuspoint.vim'))
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
-call plug#begin('~/.vim/bundle')
+" Function to show relative file name from git root
+function! LightlineFilename()
+  let root = fnamemodify(get(b:, 'git_dir'), ':h')
+  let path = expand('%:p')
+  if path[:len(root)-1] ==# root
+    return path[len(root)+1:]
+  endif
+  return expand('%')
+endfunction
+
+
+"---- Plugins configs ----"
 
 let g:fzf_install = 'yes | ./install'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': g:fzf_install }
-Plug 'junegunn/fzf.vim'
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
+let g:lightline = {
+  \   'colorscheme': 'jellybeans',
+  \   'component_function': {
+  \     'filename': 'LightlineFilename',
+  \   }
+  \ }
+
+
+"---- Plugins ----"
+
+call plug#begin('~/.vim/bundle')
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': g:fzf_install }
+Plug 'junegunn/fzf.vim'
 Plug 'itchyny/lightline.vim'
-let g:lightline = {'colorscheme': 'jellybeans'}
-
 Plug 'scrooloose/nerdtree'
-
 Plug 'tpope/vim-surround'
-
 Plug 'tpope/vim-fugitive'
-
-Plug 'iamcco/markdown-preview.vim'
-
-Plug 'will133/vim-dirdiff'
-
 Plug 'chase/focuspoint-vim'
-
-Plug 'editorconfig/editorconfig-vim'
-let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 
 call plug#end()
