@@ -17,7 +17,8 @@ link:
 	ln -s ~/.dotfiles/bash_aliases ~/.bash_aliases
 	ln -s ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
 	ln -s ~/.dotfiles/gitconfig ~/.gitconfig
-	ln -s ~/.dotfiles/init.vim ~/.config/nvim/init.vim
+	ln -s ~/.dotfiles/config/nvim/init.vim ~/.config/nvim/init.vim
+	ln -s ~/.dotfiles/config/alacritty/alacritty ~/.config/alacritty/alacritty.yml
 
 set_shell:
 	echo "export SHELL=/bin/zsh" >> ~/.bashrc
