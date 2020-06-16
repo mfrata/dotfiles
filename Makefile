@@ -9,6 +9,7 @@ rm:
 	rm ~/.tmux.conf
 	rm ~/.gitconfig
 	rm ~/.config/nvim/init.vim
+	rm ~/.config/alacritty/alacritty.yml
 
 .PHONY: link
 link:
@@ -18,7 +19,7 @@ link:
 	ln -s ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
 	ln -s ~/.dotfiles/gitconfig ~/.gitconfig
 	ln -s ~/.dotfiles/config/nvim/init.vim ~/.config/nvim/init.vim
-	ln -s ~/.dotfiles/config/alacritty/alacritty ~/.config/alacritty/alacritty.yml
+	ln -s ~/.dotfiles/config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
 
 set_shell:
 	echo "export SHELL=/bin/zsh" >> ~/.bashrc
