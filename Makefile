@@ -1,11 +1,13 @@
 .PHONY: install
-install: rm link
+install:
+	mkdir -p ~/.config/alacritty
+	mkdir -p ~/.config/nvim
+	make link
 
 .PHONY: rm
 rm:
 	rm ~/.vimrc
 	rm ~/.zshrc
-	rm ~/.bash_aliases
 	rm ~/.tmux.conf
 	rm ~/.gitconfig
 	rm ~/.config/nvim/init.vim
@@ -13,13 +15,12 @@ rm:
 
 .PHONY: link
 link:
-	ln -s ~/.dotfiles/vimrc ~/.vimrc
-	ln -s ~/.dotfiles/zshrc ~/.zshrc
-	ln -s ~/.dotfiles/bash_aliases ~/.bash_aliases
-	ln -s ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
-	ln -s ~/.dotfiles/gitconfig ~/.gitconfig
-	ln -s ~/.dotfiles/config/nvim/init.vim ~/.config/nvim/init.vim
-	ln -s ~/.dotfiles/config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
+	ln -fs ~/.dotfiles/vimrc ~/.vimrc
+	ln -fs ~/.dotfiles/zshrc ~/.zshrc
+	ln -fs ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
+	ln -fs ~/.dotfiles/gitconfig ~/.gitconfig
+	ln -fs ~/.dotfiles/config/nvim/init.vim ~/.config/nvim/init.vim
+	ln -fs ~/.dotfiles/config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
 
 set_shell:
 	echo "export SHELL=/bin/zsh" >> ~/.bashrc
