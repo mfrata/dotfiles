@@ -80,6 +80,11 @@ extra_install() {
   wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 }
 
+install_shell(){
+  echo "Instaling fzf"
+  git clone --depth 1 --quiet https://github.com/junegunn/fzf.git ~/.config/fzf
+  ~/.config/fzf/install --xdg --key-bindings --completion --update-rc --no-fish
+
 main () {
 
   cd && sudo apt update
