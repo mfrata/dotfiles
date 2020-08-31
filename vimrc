@@ -16,8 +16,6 @@ set shell=zsh          " Oh my sweet shell
 set diffopt+=vertical  " Fugitive Gdiff
 set relativenumber     " Relative line number
 
-colorscheme focuspoint
-
 
 "---- Mappings ----"
 
@@ -128,9 +126,6 @@ Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
-Plug 'junegunn/gv.vim'
-Plug 'chase/focuspoint-vim'
-Plug 'tpope/vim-obsession'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 
