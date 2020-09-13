@@ -14,6 +14,9 @@ install_pre_prerequisites() {
   done
 }
 
+package_manager_install(){
+}
+
 add_apt_repos() {
   # Spotify
   sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 931FF8E79F0876134EDDBDCCA87FF9DF48BF1C90
@@ -72,9 +75,6 @@ extra_install() {
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   
   # Docker Compose
-  sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  sudo chmod +x /usr/local/bin/docker-compose
-  sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   
   # Dropbox
   wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
@@ -84,6 +84,8 @@ install_shell(){
   echo "Instaling fzf"
   git clone --depth 1 --quiet https://github.com/junegunn/fzf.git ~/.config/fzf
   ~/.config/fzf/install --xdg --key-bindings --completion --update-rc --no-fish
+
+  package_manager_install 
 
 main () {
 
