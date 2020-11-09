@@ -69,6 +69,9 @@ imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
 
+" Yank to clipboard
+map <S-y> "+y<CR>
+
 
 "---- Commands ----"
 
