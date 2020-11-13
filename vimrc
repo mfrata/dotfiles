@@ -13,8 +13,9 @@ set shiftwidth=2      " 2 columns identation keys
 set expandtab         " tabs = spaces (youtube.com/watch?v=SsoOG6ZeyUI)
 set laststatus=2      " Used by lightline
 set shell=zsh         " Oh my sweet shell
-set diffopt+=vertical " Fugitive Gdiff
+set diffopt+=vertical " Fugitive Gdiff vertical split
 set relativenumber    " Relative line number
+set inccommand=split  " Open buffer on search showing all results
 
 
 "---- Mappings ----"
@@ -118,7 +119,6 @@ function! s:align()
   endif
 endfunction
 
-
 "---- Plugins configs ----"
 
 let g:fzf_install = 'yes | ./install'
@@ -134,6 +134,8 @@ let g:lightline = {
   \   }
   \ }
 
+let g:highlightedyank_highlight_duration = 300
+
 "---- Plugins ----"
 
 call plug#begin('~/.vim/bundle')
@@ -146,6 +148,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'godlygeek/tabular'
 Plug 'morhetz/gruvbox'
+Plug 'machakann/vim-highlightedyank'
 
 call plug#end()
 
