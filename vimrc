@@ -119,6 +119,9 @@ function! s:align()
   endif
 endfunction
 
+" Setting to automatically remove trailing whitespace when saving a file
+autocmd BufWritePre * :%s/\s\+$//e
+
 "---- Plugins configs ----"
 
 let g:fzf_install = 'yes | ./install'
