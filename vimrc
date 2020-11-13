@@ -1,20 +1,20 @@
 "---- Settings ----"
 
-set showcmd            " Show me what I'm typing
-set number             " Show line numbers
-set noswapfile         " Don't use swapfile
-set nobackup           " Don't create annoying backup files
-set incsearch          " Shows the match while typing
-set hlsearch           " Highlight found searches
-set ignorecase         " Search case insensitive...
-set smartcase          " ... but not if begins with upper case
-set tabstop=2          " tabs = 2 columns
-set shiftwidth=2       " 2 columns identation keys
-set expandtab          " tabs = spaces (youtube.com/watch?v=SsoOG6ZeyUI)
-set laststatus=2       " Used by lightline
-set shell=zsh          " Oh my sweet shell
-set diffopt+=vertical  " Fugitive Gdiff
-set relativenumber     " Relative line number
+set showcmd           " Show me what I'm typing
+set number            " Show line numbers
+set noswapfile        " Don't use swapfile
+set nobackup          " Don't create annoying backup files
+set incsearch         " Shows the match while typing
+set hlsearch          " Highlight found searches
+set ignorecase        " Search case insensitive...
+set smartcase         " ... but not if begins with upper case
+set tabstop=2         " tabs = 2 columns
+set shiftwidth=2      " 2 columns identation keys
+set expandtab         " tabs = spaces (youtube.com/watch?v=SsoOG6ZeyUI)
+set laststatus=2      " Used by lightline
+set shell=zsh         " Oh my sweet shell
+set diffopt+=vertical " Fugitive Gdiff
+set relativenumber    " Relative line number
 
 
 "---- Mappings ----"
@@ -58,20 +58,25 @@ nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
 " Disable Arrow keys in Escape mode
-map <up> <nop>
-map <down> <nop>
-map <left> <nop>
-map <right> <nop>
+map  <up>     <nop>
+map  <down>   <nop>
+map  <left>   <nop>
+map  <right>  <nop>
 
 " Disable Arrow keys in Insert mode
-imap <up> <nop>
-imap <down> <nop>
-imap <left> <nop>
-imap <right> <nop>
+imap  <up>     <nop>
+imap  <down>   <nop>
+imap  <left>   <nop>
+imap  <right>  <nop>
 
 " Yank to clipboard
 map <S-y> "+y<CR>
 
+" ctags fzf find symbols
+nnoremap <leader>f :call fzf#vim#tags("'".expand('<cword>'))<cr>
+
+" Auto align on tables using `|`
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
 "---- Commands ----"
 
@@ -89,7 +94,6 @@ endif
 if empty(glob('~/.vim/colors/focuspoint.vim'))
   silent !curl -fLo ~/.vim/colors/focuspoint.vim --create-dirs
     \ https://raw.githubusercontent.com/chase/focuspoint-vim/master/colors/focuspoint.vim
-  autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
 " Function to show relative file name from git root
@@ -102,6 +106,18 @@ function! LightlineFilename()
   return expand('%')
 endfunction
 
+" Auto align on tables using `|`
+function! s:align()
+  let p = '^\s*|\s.*\s|\s*$'
+  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
+
 
 "---- Plugins configs ----"
 
@@ -112,12 +128,11 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 
 let g:lightline = {
-  \   'colorscheme': 'jellybeans',
+  \   'colorscheme': 'gruvbox',
   \   'component_function': {
   \     'filename': 'LightlineFilename',
   \   }
   \ }
-
 
 "---- Plugins ----"
 
@@ -129,7 +144,11 @@ Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-
+Plug 'godlygeek/tabular'
+Plug 'morhetz/gruvbox'
 
 call plug#end()
+
+
+" Color scheme config
+colorscheme gruvbox
