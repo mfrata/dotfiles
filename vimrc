@@ -152,6 +152,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'godlygeek/tabular'
 Plug 'morhetz/gruvbox'
 Plug 'machakann/vim-highlightedyank'
+Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 
