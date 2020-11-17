@@ -12,10 +12,12 @@ fpath+=$HOME/.zsh/pure
 autoload -U promptinit; promptinit
 prompt pure
 
-alias ungron="gron --ungron"
-
 # Source job aliases
 [ -f ~/.work_aliases ] && source ~/.work_aliases
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+alias ungron="gron --ungron"
+
+export PATH="${PATH:+${PATH}:}/home/matheus-frata/.cargo/bin"
