@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source_folder=$1
+fd JPG --full-path $source_folder | sxiv -i -o -t

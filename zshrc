@@ -21,3 +21,4 @@ prompt pure
 alias ungron="gron --ungron"
 
 export PATH="${PATH:+${PATH}:}/home/matheus-frata/.cargo/bin"
+export PATH="${PATH:+${PATH}:}/home/matheus-frata/.dotfiles/bin/photo"

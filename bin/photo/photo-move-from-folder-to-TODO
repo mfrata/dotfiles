@@ -1,0 +1,24 @@
+#!/bin/bash
+
+source photo-related-variables.sh
+
+set -e
+
+source_dir=$1
+reference_name=$2
+dest_dir=$TODO_DIR/$reference_name
+
+full_files_paths_no_prefix_newlines="$(photo-select-photos-from-folder $source_dir | cut -d '.' -f 1)"
+full_files_paths_no_prefix_spaces=$(echo $full_files_paths_no_prefix_newlines | tr '\n' ' ')
+full_files_paths_array=(${full_files_paths_no_prefix_spaces})
+
+mkdir -p $dest_dir/raw $dest_dir/jpg $dest_dir/mp4
+
+for full_file_path in "${full_files_paths_array[@]}"
+do
+  echo $full_file_path
+  cp $full_file_path.JPG $dest_dir/jpg/"${full_file_path##*/}".JPG
+  cp $full_file_path.CR3 $dest_dir/raw/"${full_file_path##*/}".CR3
+done
+
+fd mp4 --full-path $source_dir | xargs -I@ cp @ $dest_dir/mp4/
