@@ -1,4 +1,10 @@
 #!/bin/bash
 
 source_folder=$1
-fd JPG --full-path $source_folder | sxiv -i -o -t
+selected_photos_cache_file=$source_folder/.selected_photos.txt
+
+if [ ! -f $selected_photos_cache_file ]; then
+  fd JPG --full-path $source_folder | sxiv -i -o -t > $selected_photos_cache_file
+fi
+
+cat $selected_photos_cache_file
