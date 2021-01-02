@@ -19,6 +19,7 @@ prompt pure
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 alias ungron="gron --ungron"
+alias rm="trash"
 
 export PATH="${PATH:+${PATH}:}/home/matheus-frata/.cargo/bin"
 export PATH="${PATH:+${PATH}:}/home/matheus-frata/.dotfiles/bin/photo"
