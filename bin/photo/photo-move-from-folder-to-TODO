@@ -21,4 +21,5 @@ do
   cp $full_file_path.CR3 $dest_dir/raw/"${full_file_path##*/}".CR3
 done
 
+echo "Copying videos..."
 fd mp4 --full-path $source_dir | xargs -I@ cp @ $dest_dir/mp4/
