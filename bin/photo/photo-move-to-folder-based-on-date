@@ -2,4 +2,4 @@
 
 source_folder=$1
 destiny_folder=$2
-exiftool '-Directory<CreateDate' -d $destiny_folder/%Y/%B/%d -r $source_folder
+exiftool '-Directory<CreateDate' -d $destiny_folder/%Y/%m -r $source_folder
