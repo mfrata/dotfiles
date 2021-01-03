@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source photo-related-variables.sh
+source lib/photo-related-variables.sh
 
 set -e
 
