@@ -1,4 +1,41 @@
 #!/bin/bash
 
-filename=$1
-mogrify -resize 2400x3600\> -quality 80 -sampling-factor 4:2:0 $filename
+set -e
+
+detect_file_type(){
+  file $1 --mime-type -b | cut -d '/' -f 1
+}
+
+reduce_image(){
+  # tested on jpg
+  local filename=$1
+  mogrify -resize 2400x3600\> -quality 80 -sampling-factor 4:2:0 $filename
+}
+
+reduce_video(){
+  # tested on mp4
+  # source https://unix.stackexchange.com/a/38380
+  # other refs https://x265.readthedocs.io/en/master/cli.html
+  local filename=$1
+  local copy_filename=copy-${filename}
+  mv $filename $copy_filename
+  ffmpeg -n -loglevel error \
+    -i $copy_filename \
+    -vcodec libx265 \
+      -crf 30 \
+      -x265-params log-level=0 \
+    $filename
+  rm $copy_filename
+}
+
+main() {
+  local filetype=$(detect_file_type $1)
+  case $filetype in
+    "image") reduce_image $1;;
+    "video") reduce_video $1;;
+    *) echo "unhandled filetype $filetype";;
+  esac
+}
+
+main $@
+
