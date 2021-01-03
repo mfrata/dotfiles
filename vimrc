@@ -91,12 +91,6 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
-" install focuspoint color theme
-if empty(glob('~/.vim/colors/focuspoint.vim'))
-  silent !curl -fLo ~/.vim/colors/focuspoint.vim --create-dirs
-    \ https://raw.githubusercontent.com/chase/focuspoint-vim/master/colors/focuspoint.vim
-endif
-
 " Function to show relative file name from git root
 function! LightlineFilename()
   let root = fnamemodify(get(b:, 'git_dir'), ':h')
