@@ -1,0 +1,8 @@
+#!/bin/bash
+
+file=$1
+config="lenscorrection=0.5:0.5:-0.335:0.097"
+
+# source https://www.danielplayfaircal.com/blogging/ffmpeg/lensfun/v360/lenscorrection/fisheye/dodgeball/2020/03/24/correcting-lens-distortion-with-ffmpeg.html
+
+ffmpeg -i $file -vf $config no-fish-eye-$file

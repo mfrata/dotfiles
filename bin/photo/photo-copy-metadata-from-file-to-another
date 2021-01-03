@@ -1,0 +1,7 @@
+#!/bin/bash
+
+src_file=$1
+dst_file=$2
+
+exiftool -TagsFromFile $src_file "-all:all>all:all" $dst_file
+rm "${dst_file}_original"
