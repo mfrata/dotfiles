@@ -25,6 +25,8 @@ reduce_video(){
       -crf 30 \
       -x265-params log-level=0 \
     $filename
+  # For some reason h265 is losing the metadata
+  photo-copy-metadata-from-file-to-another $copy_filename $filename
   rm $copy_filename
 }
 
