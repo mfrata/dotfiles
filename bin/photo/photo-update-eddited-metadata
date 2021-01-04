@@ -2,4 +2,4 @@
 
 ls eddited |\
 cut -d '.' -f 1 |\
-xargs -P8 -I@ photo-copy-metadata-from-file-to-another jpg/@.JPG eddited/@.jpg
+xargs -P8 -I@ photo-copy-metadata-from-file-to-another raw/@.CR3 eddited/@.jpg
