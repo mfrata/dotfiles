@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source lib/photo-related-variables.sh
+
+if [ -z $1 ]; then
+  input_dir="$PWD/album"
+else
+  input_dir=$1
+fi
+if [ -z $2 ]; then
+  album_name="$(basename $PWD).txt"
+else
+  album_name=$2
+fi
+
+cd $1
+fd -t file >> $ALBUNS_DIR/$album_name
+cd -
