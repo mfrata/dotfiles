@@ -1,5 +1,12 @@
 #!/bin/bash
 
+set -e
+
 source_folder=$1
-destiny_folder=$2
+if [ -z $2 ]; then
+  destiny_folder=$PWD
+else
+  destiny_folder=$2
+fi
+  mkdir -p $destiny_folder
 exiftool '-Directory<CreateDate' -d $destiny_folder/%Y/%m -r $source_folder
