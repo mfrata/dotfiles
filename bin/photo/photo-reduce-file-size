@@ -17,7 +17,7 @@ reduce_video(){
   # source https://unix.stackexchange.com/a/38380
   # other refs https://x265.readthedocs.io/en/master/cli.html
   local filename=$1
-  local copy_filename=copy-${filename}
+  local copy_filename=${filename}.copy
   mv $filename $copy_filename
   ffmpeg -n -loglevel error \
     -i $copy_filename \
@@ -28,13 +28,29 @@ reduce_video(){
   rm $copy_filename
 }
 
-main() {
+reduce_file_size() {
   local filetype=$(detect_file_type $1)
   case $filetype in
     "image") reduce_image $1;;
     "video") reduce_video $1;;
     *) echo "unhandled filetype $filetype";;
   esac
+}
+
+reduce_files_size_on_dir() {
+  local dir=$1
+  export -f reduce_file_size
+  # Be carefull with the recursion here!!!
+  ls $dir | xargs -I@ -P8 photo-reduce-file-size $dir/@
+}
+
+main() {
+  if [ -d $1 ]
+  then
+    reduce_files_size_on_dir $1
+  else
+    reduce_file_size $1
+  fi
 }
 
 main $@
