@@ -1,6 +1,8 @@
 #!/bin/bash
 
 source lib/photo-related-variables.sh
+# TODO /home/matheus-frata/.dotfiles/bin/photo/photo-create-album-from-dir: line 3: lib/photo-related-variables.sh: No such file or directory
+ALBUNS_DIR=~/frata/2-personal/images/albuns
 
 if [ -z $1 ]; then
   input_dir="$PWD/album"
@@ -13,6 +15,10 @@ else
   album_name=$2
 fi
 
-cd $1
-fd -t file >> $ALBUNS_DIR/$album_name
+ALBUM_FILE=$ALBUNS_DIR/$album_name
+
+cd $input_dir
+fd -t file >> $ALBUM_FILE
 cd -
+
+echo "Album created at $ALBUM_FILE, with $(cat $ALBUNS_DIR/$album_name | wc -l) photos"
