@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH="/home/matheus-frata/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 HIST_STAMPS="mm/dd/yyyy"
 
@@ -12,7 +12,7 @@ fpath+=$HOME/.zsh/pure
 autoload -U promptinit; promptinit
 prompt pure
 
-# Source job aliases
+# Source work aliases
 [ -f ~/.work_aliases ] && source ~/.work_aliases
 
 # fzf
@@ -21,5 +21,11 @@ prompt pure
 alias ungron="gron --ungron"
 alias rm="trash"
 
-export PATH="${PATH:+${PATH}:}/home/matheus-frata/.cargo/bin"
-export PATH="${PATH:+${PATH}:}/home/matheus-frata/.dotfiles/bin/photo"
+fpath+="$HOME/.local/bin"
+fpath+="$HOME/.cargo/bin"
+fpath+="$HOME/.dotfiles/bin/photo"
+
+function venv {
+  [ ! -d .venv ] && python -m venv .venv
+  source .venv/bin/activate
+}
