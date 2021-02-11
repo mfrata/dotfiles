@@ -1,7 +1,8 @@
 [user]
-  name = Matheus Frata
+	name = Matheus Frata
+	email = git@mfrata.com
 [core]
-  editor = vim
+  editor = nvim
 [alias]
   tree = log --graph --pretty=format:'%C(yellow)%h%Creset%C(cyan)%C(bold)%d%Creset %C(cyan)(%cr)%Creset %C(green)%cn%Creset %s'
   tree2 = log --graph --pretty=format:'%C(yellow)%h%Creset%C(cyan)%C(bold)%d%Creset %C(cyan)(%cD)%Creset %C(green)%ce%Creset %s'
