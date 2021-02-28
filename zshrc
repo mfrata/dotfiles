@@ -21,11 +21,15 @@ prompt pure
 alias ungron="gron --ungron"
 alias rm="trash"
 
-fpath+="$HOME/.local/bin"
-fpath+="$HOME/.cargo/bin"
-fpath+="$HOME/.dotfiles/bin/photo"
+path+="$HOME/.local/bin"
+path+="$HOME/.cargo/bin"
+path+="$HOME/.dotfiles/bin/photo"
 
 function venv {
   [ ! -d .venv ] && python -m venv .venv
   source .venv/bin/activate
 }
+
+
+# python
+export PYTHONDONTWRITEBYTECODE=1
