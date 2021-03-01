@@ -1,52 +1,31 @@
 #!/bin/bash
 
-install_pre_prerequisites() {
+_install() {
+  sudo apt install -y $1
+}
+
+_pip_install() {
+  pip3 install -U $1
+}
+
+install-pre-prerequisites() {
   # These are prerequisite for the add_apt_repos
   PREPACKAGES="
     curl \
-    apt-transport-https \
-    ca-certificates \
     software-properties-common \
-    gnupg \
+    make \
+    git \
+    python3-pip
   "
   for PREPACKAGE in ${PREPACKAGES}; do
-    sudo apt install -y ${PREPACKAGE};
+    _install ${PREPACKAGE};
   done
 }
 
-add_apt_repos() {
-  # Spotify
-  sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 931FF8E79F0876134EDDBDCCA87FF9DF48BF1C90
-  echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
-
-  # Docker
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
-
-  # K8s
-  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-  echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-
-  # Gcloud
-  echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" \
-    | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg \
-    | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-
-  # sbt
-  echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
-  curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
-}
-
-post_install() {
-  # Docker without sudo
-  sudo usermod -aG docker ${USER}
-}
-
-create_dirs_n_files() {
+create-home-dirs-files() {
   # Code dir: Where the sources live
-  if [ ! -d ~/code ]; then
-    mkdir code
+  if [ ! -d ~/Code ]; then
+    mkdir Code
   fi
 
   # dotfiles
@@ -61,70 +40,124 @@ create_dirs_n_files() {
   fi
 }
 
-extra_install() {
-  # Ripgrep
-  RG_VERSION=11.0.1
-  curl -LO https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep_${RG_VERSION}_amd64.deb
-  sudo dpkg -i ripgrep_${RG_VERSION}_amd64.deb | sudo apt install -f
-  rm ripgrep_${RG_VERSION}_amd64.deb
 
-  # oh-my-zsh
+terminal-install() {
+  # Neovim
+  wget https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz
+  tar -xvzf nvim-linux64.tar.gz
+  sudo rsync nvim-linux64/ /usr/
+  rm nvim-linux64* -rf
+
+  # Zsh
+  _install zsh
+  chsh -s /usr/bin/zsh mfrata
+
+  # om-my-zsh
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-  # Docker Compose
-  sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  sudo chmod +x /usr/local/bin/docker-compose
-  sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  # Pure theme for zsh
+  mkdir -p "$HOME/.zsh"
+  git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
 
+  # Tmux  Terminal multiplexer
+  _install tmux
+
+  # FZF  Fuzzy find (can't live without it)
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  ~/.fzf/install
+
+  # Utils
+  _install htop # Monitor process on terminal
+  _install tree # View dir struct
+  _install jq # Query jsons
+  _pip_install trash-cli # Safe rm
+
+  # A good terminal (I liked that you can remove the top bar)
+  # TODO get newer version of allacritty
+  ALACRITTY_VERSION=v0.4.3
+  wget https://github.com/alacritty/alacritty/releases/download/$ALACRITTY_VERSION/Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb
+  sudo dpkg -i Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb | sudo apt install -f
+
+  # Better grep
+  RG_VERSION=12.1.1
+  curl -LO https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep_${RG_VERSION}_amd64.deb
+  sudo dpkg -i ripgrep_${RG_VERSION}_amd64.deb
+  rm ripgrep_${RG_VERSION}_amd64.deb
+}
+
+dev-install() {
+  _install build-essential
+
+  # Docker
+  curl -fsSL https://get.docker.com -o get-docker.sh
+  sudo sh get-docker.sh
+  sudo usermod -aG docker mfrata
+  rm get-docker.sh
+
+  # Docker compose
+  _pip_install docker-compose
+
+  # Kubectl
+  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+  curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+  echo "$(<kubectl.sha256) kubectl" | sha256sum --check && sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+  rm kubectl.sha256
+
+  # Google cloud
+  GCP_VERSION=329.0.0
+  curl -LO https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GCP_VERSION-linux-x86_64.tar.gz
+  tar -C ~/.local -xzf google-cloud-sdk-$GCP_VERSION-linux-x86_64.tar.gz
+  ~/.local/google-cloud-sdk/install.sh
+}
+
+javascript-install () {
+  NODE_VERSION=v15.10.0
+  curl -LO https://nodejs.org/dist/$NODE_VERSION/node-$NODE_VERSION-linux-x64.tar.xz
+  sudo tar -C /usr/local --strip-components 1 -xzf node-$NODE_VERSION-linux-x64.tar.gz
+}
+
+python-install() {
+  # TODO devtools (mypy,autoflake,black and etc)
+  echo
+}
+
+scala-install() {
+  # TODO Sbt
+  # TODO Scala lang
+  echo
+}
+
+rust-install() {
+  # TODO cargo
+  echo
+}
+
+media-install() {
+  # TODO Spotify
+  # TODO Audacity
+  # TODO Rawtherapee
+  # TODO Sound pluging
+  # TODO mpv
+  # TODO ffmpeg
+  # TODO imagemagick
+  echo
+}
+
+extra-install() {
   # Dropbox
   wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 }
 
-main () {
+all-install () {
+  cd && sudo apt update && sudo apt upgrade
 
-  cd && sudo apt update
-  install_pre_prerequisites
-
-  add_apt_repos && sudo apt update
-
-  PACKAGES="
-    net-tools \
-    git \
-    vim \
-    zsh \
-    tmux \
-    make \
-    htop \
-    tree \
-    build-essential \
-    openvpn \
-    python3 \
-    python3-pip \
-    tree \
-    chromium-browser \
-    jq \
-    spotify-client \
-    docker-ce \
-    kubectl \
-    google-cloud-sdk \
-    keepassxc \
-    sbt \
-    trash-cli \
-  "
-  for PACKAGE in ${PACKAGES}; do
-    sudo apt install -y ${PACKAGE};
-  done
-
-  create_dirs_n_files
-
-  extra_install
-
-  post_install
-
-  echo "Two more things..."
-  echo "Install finish installing dropbox by running:"
-  echo "~/.dropbox-dist/dropboxd"
-  echo "Start the google cloud: `gcloud init`"
+  install-pre-prerequisites
+  create-home-dirs-files
+  terminal-install
+  dev-install
 }
 
-main
+main() {
+  # TODO make possible to install only part of the packages
+  echo
+}
