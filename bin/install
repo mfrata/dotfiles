@@ -5,10 +5,10 @@ _install() {
 }
 
 _pip_install() {
-  pip3 install -U $1
+  pip install -U $1
 }
 
-install-pre-prerequisites() {
+preprerequisites-install() {
   # These are prerequisite for the add_apt_repos
   PREPACKAGES="
     curl \
@@ -20,14 +20,11 @@ install-pre-prerequisites() {
   for PREPACKAGE in ${PREPACKAGES}; do
     _install ${PREPACKAGE};
   done
+
+  pip3 install pip
 }
 
-create-home-dirs-files() {
-  # Code dir: Where the sources live
-  if [ ! -d ~/Code ]; then
-    mkdir Code
-  fi
-
+homedirs-install() {
   # dotfiles
   if [ ! -d ~/.dotfiles ]; then
     git clone https://github.com/mfrata/dotfiles.git .dotfiles
@@ -44,8 +41,7 @@ create-home-dirs-files() {
 terminal-install() {
   # Neovim
   wget https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz
-  tar -xvzf nvim-linux64.tar.gz
-  sudo rsync nvim-linux64/ /usr/
+  sudo tar -C /usr/local --strip-components 1 -xzf nvim-linux64.tar.gz
   rm nvim-linux64* -rf
 
   # Zsh
@@ -77,6 +73,7 @@ terminal-install() {
   ALACRITTY_VERSION=v0.4.3
   wget https://github.com/alacritty/alacritty/releases/download/$ALACRITTY_VERSION/Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb
   sudo dpkg -i Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb | sudo apt install -f
+  rm Alacritty*
 
   # Better grep
   RG_VERSION=12.1.1
@@ -85,7 +82,7 @@ terminal-install() {
   rm ripgrep_${RG_VERSION}_amd64.deb
 }
 
-dev-install() {
+devops-install() {
   _install build-essential
 
   # Docker
@@ -95,12 +92,12 @@ dev-install() {
   rm get-docker.sh
 
   # Docker compose
-  _pip_install docker-compose
+  # TODO fix docker-compose
 
   # Kubectl
   curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
   curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
-  echo "$(<kubectl.sha256) kubectl" | sha256sum --check && sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+  echo "$(<kubectl.sha256) kubectl" || sha256sum --check && sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
   rm kubectl.sha256
 
   # Google cloud
@@ -108,6 +105,7 @@ dev-install() {
   curl -LO https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GCP_VERSION-linux-x86_64.tar.gz
   tar -C ~/.local -xzf google-cloud-sdk-$GCP_VERSION-linux-x86_64.tar.gz
   ~/.local/google-cloud-sdk/install.sh
+  rm google*
 }
 
 javascript-install () {
@@ -151,10 +149,10 @@ extra-install() {
 all-install () {
   cd && sudo apt update && sudo apt upgrade
 
-  install-pre-prerequisites
-  create-home-dirs-files
+  preprerequisites-install
+  homedirs-install
   terminal-install
-  dev-install
+  devops-install
 }
 
 main() {
