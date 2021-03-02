@@ -149,6 +149,13 @@ tools-install() {
   # TODO add calc, and other stuff
 }
 
+others-install() {
+  # Zoom -> Why!!?
+  wget https://zoom.us/client/latest/zoom_amd64.deb
+  sudo apt install ./zoom_amd64.deb -y
+  rm zoom_amd64.deb
+}
+
 
 media-install() {
   # TODO Spotify
