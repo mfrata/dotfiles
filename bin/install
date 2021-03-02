@@ -130,6 +130,26 @@ rust-install() {
   echo
 }
 
+tools-install() {
+  # Keybase - Share secrets safely
+  curl --remote-name https://prerelease.keybase.io/keybase_amd64.deb
+  sudo apt install ./keybase_amd64.deb
+  run_keybase
+  rm keybase*
+
+  # KeypassXC - otp
+  KEYPASSXC_VERSION=2.6.4
+  wget https://github.com/keepassxreboot/keepassxc/releases/download/$KEYPASSXC_VERSION/KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
+  chmod +x ./KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
+  ./KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage --appimage-extract usr
+  sudo cp -r squashfs-root/usr/* /usr/local/
+  rm ./KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage squashfs-root -r
+
+  # TODO add telegram
+  # TODO add calc, and other stuff
+}
+
+
 media-install() {
   # TODO Spotify
   # TODO Audacity
