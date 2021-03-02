@@ -138,7 +138,11 @@ media-install() {
   # TODO mpv
   # TODO ffmpeg
   # TODO imagemagick
-  echo
+
+  # Rapid Photo Downloader
+  wget https://launchpad.net/rapid/pyqt/0.9.26/+download/install.py
+  python3 install.py
+  rm install.py
 }
 
 extra-install() {
