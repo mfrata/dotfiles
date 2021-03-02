@@ -21,7 +21,3 @@ link:
 	ln -fs ~/.dotfiles/gitconfig ~/.gitconfig
 	ln -fs ~/.dotfiles/config/nvim/init.vim ~/.config/nvim/init.vim
 	ln -fs ~/.dotfiles/config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
-
-set_shell:
-	echo "export SHELL=/bin/zsh" >> ~/.bashrc
-	echo "exec /bin/zsh -l" >> ~/.bashrc
