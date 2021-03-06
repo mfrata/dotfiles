@@ -82,6 +82,7 @@ terminal-install() {
   ~/.fzf/install
 
   # Utils
+  install-apt xsel # Clipboard utilities
   install-apt htop # Monitor process on terminal
   install-apt tree # View dir struct
   install-apt jq # Query jsons
