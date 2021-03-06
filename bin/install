@@ -1,7 +1,7 @@
 #!/bin/bash
 
 install-apt() {
-  sudo apt install -fy $1
+  sudo apt install --no-install-recommends -f --yes $1
 }
 
 install-pip() {
@@ -14,7 +14,9 @@ install-dpkg() {
 }
 
 install-tar() {
-  sudo tar -C /usr/local --strip-components 1 -xzf $1
+  [ $2 ] && location=$2 || location=/usr/local
+  sudo tar -C $location --strip-components 1 -xf $1
+  rm $1
 }
 
 install-appimage() {
@@ -22,6 +24,17 @@ install-appimage() {
   ./$1 --appimage-extract usr
   sudo cp -r squashfs-root/usr/* /usr/local/
   rm $1 squashfs-root -r
+}
+
+install-sh() {
+  $url=$1
+  sudo sh -c "$(curl -fsSL ${url})"
+}
+
+install-bin() {
+  $file=$1
+  sudo install -o root -g root -m 0755 $file /usr/local/bin/$file
+  rm $file
 }
 
 repo(){
@@ -68,7 +81,7 @@ terminal-install() {
   chsh -s /usr/bin/zsh mfrata
 
   # om-my-zsh
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+  install-sh https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
 
   # Pure theme for zsh
   mkdir -p "$HOME/.zsh"
@@ -104,17 +117,16 @@ devops-install() {
   install-apt build-essential
 
   # Docker
-  sudo sh -c "$(curl -fsSL https://get.docker.com)"
+  install-sh https://get.docker.com
   sudo usermod -aG docker mfrata
 
   # Docker compose
   # TODO fix docker-compose
 
   # Kubectl
-  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-  curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
-  echo "$(<kubectl.sha256) kubectl" || sha256sum --check && sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-  rm kubectl.sha256
+  K8S_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+  wget "https://dl.k8s.io/release/$K8S_VERSION/bin/linux/amd64/kubectl"
+  install-bin kubectl /usr/local/bin/kubectl
 
   # Google cloud
   GCP_VERSION=329.0.0
@@ -162,8 +174,11 @@ tools-install() {
   wget https://github.com/keepassxreboot/keepassxc/releases/download/$KEYPASSXC_VERSION/KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
   install-appimage KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
 
-  # TODO add telegram
-  # TODO add calc, and other stuff
+  TELEGRAM_VERSION=2.6.1
+  wget https://updates.tdesktop.com/tlinux/tsetup.$TELEGRAM_VERSION.tar.xz
+  install-tar tsetup.$TELEGRAM_VERSION.tar.xz /usr/local/bin
+  # Libreoffice calc
+  install-apt libreoffice-calc
 }
 
 others-install() {
@@ -171,9 +186,6 @@ others-install() {
   wget https://zoom.us/client/latest/zoom_amd64.deb
   install-dpkg zoom_amd64.deb
 
-
-  # Libreoffice calc
-  install-apt libreoffice-calc
 }
 
 
@@ -183,6 +195,7 @@ media-install() {
   # TODO Rawtherapee
   # TODO Sound pluging
   # TODO mpv
+  repo ppa:mc3man/mpv-tests $$ install-apt mpv
   # TODO ffmpeg
   # TODO imagemagick
 
