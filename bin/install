@@ -1,11 +1,31 @@
 #!/bin/bash
 
-_install() {
-  sudo apt install -y $1
+install-apt() {
+  sudo apt install -fy $1
 }
 
-_pip_install() {
+install-pip() {
   pip install -U $1
+}
+
+install-dpkg() {
+  sudo dpkg -i $1 | install-apt
+  rm $1
+}
+
+install-tar() {
+  sudo tar -C /usr/local --strip-components 1 -xzf $1
+}
+
+install-appimage() {
+  chmod +x $1
+  ./$1 --appimage-extract usr
+  sudo cp -r squashfs-root/usr/* /usr/local/
+  rm $1 squashfs-root -r
+}
+
+repo(){
+  sudo add-apt-repository --yes $1
 }
 
 preprerequisites-install() {
@@ -18,7 +38,7 @@ preprerequisites-install() {
     python3-pip
   "
   for PREPACKAGE in ${PREPACKAGES}; do
-    _install ${PREPACKAGE};
+    install-apt ${PREPACKAGE};
   done
 
   pip3 install pip
@@ -41,11 +61,10 @@ homedirs-install() {
 terminal-install() {
   # Neovim
   wget https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz
-  sudo tar -C /usr/local --strip-components 1 -xzf nvim-linux64.tar.gz
-  rm nvim-linux64* -rf
+  install-tar nvim-linux64.tar.gz
 
   # Zsh
-  _install zsh
+  install-apt zsh
   chsh -s /usr/bin/zsh mfrata
 
   # om-my-zsh
@@ -56,40 +75,36 @@ terminal-install() {
   git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
 
   # Tmux  Terminal multiplexer
-  _install tmux
+  install-apt tmux
 
   # FZF  Fuzzy find (can't live without it)
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
   ~/.fzf/install
 
   # Utils
-  _install htop # Monitor process on terminal
-  _install tree # View dir struct
-  _install jq # Query jsons
-  _pip_install trash-cli # Safe rm
+  install-apt htop # Monitor process on terminal
+  install-apt tree # View dir struct
+  install-apt jq # Query jsons
+  install-pip trash-cli # Safe rm
 
   # A good terminal (I liked that you can remove the top bar)
   # TODO get newer version of allacritty
   ALACRITTY_VERSION=v0.4.3
   wget https://github.com/alacritty/alacritty/releases/download/$ALACRITTY_VERSION/Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb
-  sudo dpkg -i Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb | sudo apt install -f
-  rm Alacritty*
+  install-dpkg Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb
 
   # Better grep
   RG_VERSION=12.1.1
-  curl -LO https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep_${RG_VERSION}_amd64.deb
-  sudo dpkg -i ripgrep_${RG_VERSION}_amd64.deb
-  rm ripgrep_${RG_VERSION}_amd64.deb
+  wget https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep_${RG_VERSION}_amd64.deb
+  install-dpkg ripgrep_${RG_VERSION}_amd64.deb
 }
 
 devops-install() {
-  _install build-essential
+  install-apt build-essential
 
   # Docker
-  curl -fsSL https://get.docker.com -o get-docker.sh
-  sudo sh get-docker.sh
+  sudo sh -c "$(curl -fsSL https://get.docker.com)"
   sudo usermod -aG docker mfrata
-  rm get-docker.sh
 
   # Docker compose
   # TODO fix docker-compose
@@ -110,13 +125,18 @@ devops-install() {
 
 javascript-install () {
   NODE_VERSION=v15.10.0
-  curl -LO https://nodejs.org/dist/$NODE_VERSION/node-$NODE_VERSION-linux-x64.tar.xz
-  sudo tar -C /usr/local --strip-components 1 -xzf node-$NODE_VERSION-linux-x64.tar.gz
+  wget https://nodejs.org/dist/$NODE_VERSION/node-$NODE_VERSION-linux-x64.tar.xz
+  _install_tar node-$NODE_VERSION-linux-x64.tar.gz
 }
 
 python-install() {
-  # TODO devtools (mypy,autoflake,black and etc)
-  echo
+  # Python 3.9
+  repo ppa:deadsnakes/ppa && install-apt python3.9
+  sudo mv /usr/bin/python /usr/bin/python2
+  sudo ln -s /usr/bin/python3.9 /usr/bin/python
+
+  install-pip pytest
+  install-pip ipython
 }
 
 scala-install() {
@@ -133,17 +153,13 @@ rust-install() {
 tools-install() {
   # Keybase - Share secrets safely
   curl --remote-name https://prerelease.keybase.io/keybase_amd64.deb
-  sudo apt install ./keybase_amd64.deb
+  install-dpkg keybase_amd64.deb
   run_keybase
-  rm keybase*
 
   # KeypassXC - otp
   KEYPASSXC_VERSION=2.6.4
   wget https://github.com/keepassxreboot/keepassxc/releases/download/$KEYPASSXC_VERSION/KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
-  chmod +x ./KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
-  ./KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage --appimage-extract usr
-  sudo cp -r squashfs-root/usr/* /usr/local/
-  rm ./KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage squashfs-root -r
+  install-appimage KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
 
   # TODO add telegram
   # TODO add calc, and other stuff
@@ -152,14 +168,17 @@ tools-install() {
 others-install() {
   # Zoom -> Why!!?
   wget https://zoom.us/client/latest/zoom_amd64.deb
-  sudo apt install ./zoom_amd64.deb -y
-  rm zoom_amd64.deb
+  install-dpkg zoom_amd64.deb
+
+
+  # Libreoffice calc
+  install-apt libreoffice-calc
 }
 
 
 media-install() {
   # TODO Spotify
-  # TODO Audacity
+  repo ppa:ubuntuhandbook1/audacity && install-apt audacity
   # TODO Rawtherapee
   # TODO Sound pluging
   # TODO mpv
