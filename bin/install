@@ -1,23 +1,35 @@
 #!/bin/bash
 
-install-apt() {
-  sudo apt install --no-install-recommends -f --yes $1
+set -ex
+
+
+update-upgrade() {
+  sudo apt update && sudo apt upgrade -y
 }
+
+
+install-apt() {
+  sudo apt install -qq --no-install-recommends -f --yes $1
+}
+
 
 install-pip() {
-  pip install -U $1
+  sudo pip3 install $1
 }
 
+
 install-dpkg() {
-  sudo dpkg -i $1 | install-apt
+  sudo dpkg -i $1 || install-apt
   rm $1
 }
+
 
 install-tar() {
   [ $2 ] && location=$2 || location=/usr/local
   sudo tar -C $location --strip-components 1 -xf $1
   rm $1
 }
+
 
 install-appimage() {
   chmod +x $1
@@ -26,36 +38,62 @@ install-appimage() {
   rm $1 squashfs-root -r
 }
 
-install-sh() {
-  $url=$1
-  sudo sh -c "$(curl -fsSL ${url})"
+
+curl-dl-content() {
+  curl --fail --silent --show-error --location $@
 }
 
+
+curl-dl-file (){
+  [ $2 ] && filename=$2 || filename=$(basename $1)
+  curl-dl-content $1 --output $filename
+}
+
+
+install-sh() {
+  sudo sh -c "$(curl-dl-content ${1})" $@
+}
+
+
 install-bin() {
-  $file=$1
+  file=$1
   sudo install -o root -g root -m 0755 $file /usr/local/bin/$file
   rm $file
 }
+
+
+install-opt() {
+  sudo tar -C /opt -xf $1
+  rm $1
+}
+
 
 repo(){
   sudo add-apt-repository --yes $1
 }
 
-preprerequisites-install() {
-  # These are prerequisite for the add_apt_repos
-  PREPACKAGES="
-    curl \
-    software-properties-common \
-    make \
-    git \
-    python3-pip
-  "
-  for PREPACKAGE in ${PREPACKAGES}; do
-    install-apt ${PREPACKAGE};
-  done
 
-  pip3 install pip
+post-install-add() {
+  post_install_script="/tmp/postinstall"
+  if [ ! -f "$post_install_script" ]; then
+    echo "#!/bin/bash" >> $post_install_script
+    echo "echo 'Running post install'" >> $post_install_script
+    chmod +x $post_install_script
+  fi
+  echo "$1" >> $post_install_script
 }
+
+
+preprerequisites-install() {
+  cd && update-upgrade
+
+  install-apt curl # Dl files or scritps' content
+  install-apt software-properties-common # add repos ppa
+  install-apt make
+  install-apt git
+  install-apt wget # for external scripts
+}
+
 
 homedirs-install() {
   # dotfiles
@@ -71,14 +109,153 @@ homedirs-install() {
 }
 
 
+javascript-install () {
+  NODE_VERSION=v15.10.0
+  curl-dl-file https://nodejs.org/dist/$NODE_VERSION/node-$NODE_VERSION-linux-x64.tar.xz
+  install-tar node-$NODE_VERSION-linux-x64.tar.xz
+}
+
+
+python-install() {
+  install-apt python3-pip
+  install-apt python3-setuptools
+
+  # Upgrade pip to the latest version
+  pip3 install --upgrade pip
+
+  # Python 3.9
+  # TODO this is asking for timezone on install blocking script
+  #repo ppa:deadsnakes/ppa && install-apt python3.9
+  #sudo mv /usr/bin/python /usr/bin/python2
+  #sudo ln -s /usr/bin/python3.9 /usr/bin/python
+
+  install-pip pytest
+  install-pip ipython
+}
+
+
+scala-install() {
+  # TODO Sbt
+  # TODO Scala lang
+  echo
+}
+
+
+rust-install() {
+  # Installing cargo
+  install-sh https://sh.rustup.rs -y
+}
+
+
+devenv-install() {
+  install-apt build-essential
+  python-install
+  scala-install
+  rust-install
+  javascript-install
+
+  # Docker
+  install-sh https://get.docker.com
+  sudo usermod -aG docker $USER
+
+  # Docker compose
+  COMPOSE_VERSION=1.28.5
+  curl-dl-file "https://github.com/docker/compose/releases/download/$COMPOSE_VERSION/docker-compose-Linux-x86_64" docker-compose
+  install-bin docker-compose
+
+  # Kubectl
+  K8S_VERSION=$(curl-dl-content https://dl.k8s.io/release/stable.txt)
+  curl-dl-file "https://dl.k8s.io/release/$K8S_VERSION/bin/linux/amd64/kubectl"
+  install-bin kubectl
+
+  # Google cloud
+  GCP_VERSION=329.0.0
+  curl-dl-file https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GCP_VERSION-linux-x86_64.tar.gz
+  install-opt google-cloud-sdk-$GCP_VERSION-linux-x86_64.tar.gz
+  post-install-add "/opt/google-cloud-sdk/install.sh"
+}
+
+
+tools-install() {
+  # Keybase - Share secrets safely
+  curl-dl-file https://prerelease.keybase.io/keybase_amd64.deb
+  install-dpkg keybase_amd64.deb
+  post-install-add "run_keybase"
+
+  # KeypassXC - otp
+  KEYPASSXC_VERSION=2.6.4
+  curl-dl-file https://github.com/keepassxreboot/keepassxc/releases/download/$KEYPASSXC_VERSION/KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
+  install-appimage KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
+
+  TELEGRAM_VERSION=2.6.1
+  curl-dl-file https://updates.tdesktop.com/tlinux/tsetup.$TELEGRAM_VERSION.tar.xz
+  install-opt tsetup.$TELEGRAM_VERSION.tar.xz
+  post-install-add "/opt/Telegram/Telegram"
+
+  # Libreoffice calc
+  install-apt libreoffice-calc
+
+  # Joplin - my notes app
+  # TODO joplin install script still getting errors
+  # install-sh https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh
+}
+
+
+others-install() {
+  # Zoom -> Why!!?
+  curl-dl-file https://zoom.us/client/latest/zoom_amd64.deb
+  install-dpkg zoom_amd64.deb
+}
+
+
+media-install() {
+  ### Audio ###
+
+  # Audacity - Edit my songs!!!
+  repo ppa:ubuntuhandbook1/audacity && install-apt audacity
+
+
+  ### Video ###
+
+  # mpv - Favorite video player
+  repo ppa:mc3man/mpv-tests && install-apt mpv
+
+  # ffmpeg - Video tools
+  install-apt ffmpeg
+
+
+  ### Image ###
+
+  # Rawtherapee - Edit raw photos! Can use darktable also
+  RAWTHERAPEE_VERSION=5.8
+  curl-dl-file https://rawtherapee.com/shared/builds/linux/RawTherapee_$RAWTHERAPEE_VERSION.AppImage
+  install-appimage RawTherapee_$RAWTHERAPEE_VERSION.AppImage
+
+  # Image magick - handle images
+  curl-dl-file https://download.imagemagick.org/ImageMagick/download/binaries/magick
+  install-appimage magick
+
+  # Exiftools - handle metadata information of pictures
+  EXIFTOOL_VERSION=12.21
+  curl-dl-file https://exiftool.org/Image-ExifTool-$EXIFTOOL_VERSION.tar.gz
+  install-opt Image-ExifTool-$EXIFTOOL_VERSION.tar.gz
+  cd /opt/Image-ExifTool-$EXIFTOOL_VERSION &&\
+    sudo perl Makefile.PL &&\
+    sudo make install
+
+  # sxiv - simple image viewer
+  install-apt sxiv
+}
+
+
 terminal-install() {
   # Neovim
-  wget https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz
+  curl-dl-file https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz
   install-tar nvim-linux64.tar.gz
 
   # Zsh
   install-apt zsh
-  chsh -s /usr/bin/zsh mfrata
+  chsh -s /usr/bin/zsh $USER
 
   # om-my-zsh
   install-sh https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh
@@ -104,122 +281,35 @@ terminal-install() {
   # A good terminal (I liked that you can remove the top bar)
   # TODO get newer version of allacritty
   ALACRITTY_VERSION=v0.4.3
-  wget https://github.com/alacritty/alacritty/releases/download/$ALACRITTY_VERSION/Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb
+  curl-dl-file https://github.com/alacritty/alacritty/releases/download/$ALACRITTY_VERSION/Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb
   install-dpkg Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb
 
   # Better grep
   RG_VERSION=12.1.1
-  wget https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep_${RG_VERSION}_amd64.deb
+  curl-dl-file https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep_${RG_VERSION}_amd64.deb
   install-dpkg ripgrep_${RG_VERSION}_amd64.deb
 }
 
-devops-install() {
-  install-apt build-essential
-
-  # Docker
-  install-sh https://get.docker.com
-  sudo usermod -aG docker mfrata
-
-  # Docker compose
-  # TODO fix docker-compose
-
-  # Kubectl
-  K8S_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-  wget "https://dl.k8s.io/release/$K8S_VERSION/bin/linux/amd64/kubectl"
-  install-bin kubectl /usr/local/bin/kubectl
-
-  # Google cloud
-  GCP_VERSION=329.0.0
-  curl -LO https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-$GCP_VERSION-linux-x86_64.tar.gz
-  tar -C ~/.local -xzf google-cloud-sdk-$GCP_VERSION-linux-x86_64.tar.gz
-  ~/.local/google-cloud-sdk/install.sh
-  rm google*
-}
-
-javascript-install () {
-  NODE_VERSION=v15.10.0
-  wget https://nodejs.org/dist/$NODE_VERSION/node-$NODE_VERSION-linux-x64.tar.xz
-  _install_tar node-$NODE_VERSION-linux-x64.tar.gz
-}
-
-python-install() {
-  # Python 3.9
-  repo ppa:deadsnakes/ppa && install-apt python3.9
-  sudo mv /usr/bin/python /usr/bin/python2
-  sudo ln -s /usr/bin/python3.9 /usr/bin/python
-
-  install-pip pytest
-  install-pip ipython
-}
-
-scala-install() {
-  # TODO Sbt
-  # TODO Scala lang
-  echo
-}
-
-rust-install() {
-  # TODO cargo
-  echo
-}
-
-tools-install() {
-  # Keybase - Share secrets safely
-  curl --remote-name https://prerelease.keybase.io/keybase_amd64.deb
-  install-dpkg keybase_amd64.deb
-  run_keybase
-
-  # KeypassXC - otp
-  KEYPASSXC_VERSION=2.6.4
-  wget https://github.com/keepassxreboot/keepassxc/releases/download/$KEYPASSXC_VERSION/KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
-  install-appimage KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
-
-  TELEGRAM_VERSION=2.6.1
-  wget https://updates.tdesktop.com/tlinux/tsetup.$TELEGRAM_VERSION.tar.xz
-  install-tar tsetup.$TELEGRAM_VERSION.tar.xz /usr/local/bin
-  # Libreoffice calc
-  install-apt libreoffice-calc
-}
-
-others-install() {
-  # Zoom -> Why!!?
-  wget https://zoom.us/client/latest/zoom_amd64.deb
-  install-dpkg zoom_amd64.deb
-
-}
-
-
-media-install() {
-  # TODO Spotify
-  repo ppa:ubuntuhandbook1/audacity && install-apt audacity
-  # TODO Rawtherapee
-  # TODO Sound pluging
-  # TODO mpv
-  repo ppa:mc3man/mpv-tests $$ install-apt mpv
-  # TODO ffmpeg
-  # TODO imagemagick
-
-  # Rapid Photo Downloader
-  wget https://launchpad.net/rapid/pyqt/0.9.26/+download/install.py
-  python3 install.py
-  rm install.py
-}
-
-extra-install() {
-  # Dropbox
-  wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
-}
 
 all-install () {
-  cd && sudo apt update && sudo apt upgrade
-
   preprerequisites-install
   homedirs-install
+  devenv-install
+  tools-install
+  media-install
+  others-install
   terminal-install
-  devops-install
 }
 
 main() {
-  # TODO make possible to install only part of the packages
-  echo
+  if [ -z $1 ]; then
+    echo "Usage: install all"
+  else
+    $1-install $@
+    echo "Instalation Done! Run for manual post instalation run:"
+    echo
+    echo "  /tmp/postinstall"
+  fi
 }
+
+main $@

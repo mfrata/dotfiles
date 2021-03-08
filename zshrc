@@ -26,13 +26,14 @@ path+="$HOME/.cargo/bin"
 path+="$HOME/.dotfiles/bin/photo"
 
 function venv {
-  [ ! -d .venv ] && python -m venv .venv
+  [ ! -d .venv ] && python3 -m venv .venv
   source .venv/bin/activate
 }
 
 
 # python
 export PYTHONDONTWRITEBYTECODE=1
+alias pytest="pytest -p no:cacheprovider"
 
 GCP_INSTALL_PATH="$HOME/.local/google-cloud-sdk"
 [ -f "$GCP_INSTALL_PATH/path.zsh.inc" ] && . "$GCP_INSTALL_PATH/path.zsh.inc"
