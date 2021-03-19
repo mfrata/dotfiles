@@ -293,7 +293,7 @@ terminal-install() {
 
 
 all-install () {
-  preprerequisites-install
+  prerequisites-install
   homedirs-install
   devenv-install
   tools-install
