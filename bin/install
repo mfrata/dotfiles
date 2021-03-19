@@ -283,6 +283,7 @@ terminal-install() {
   ALACRITTY_VERSION=v0.4.3
   curl-dl-file https://github.com/alacritty/alacritty/releases/download/$ALACRITTY_VERSION/Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb
   install-dpkg Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb
+  gsettings set org.gnome.desktop.default-applications.terminal exec 'alacritty'
 
   # Better grep
   RG_VERSION=12.1.1
