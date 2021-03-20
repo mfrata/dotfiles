@@ -125,7 +125,7 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 
 let g:lightline = {
-  \   'colorscheme': 'gruvbox',
+  \   'colorscheme': 'nord',
   \   'component_function': {
   \     'filename': 'LightlineFilename',
   \   }
@@ -145,6 +145,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'godlygeek/tabular'
 Plug 'morhetz/gruvbox'
+Plug 'arcticicestudio/nord-vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'sheerun/vim-polyglot'
 
@@ -152,4 +153,4 @@ call plug#end()
 
 
 " Color scheme config
-colorscheme gruvbox
+colorscheme nord
