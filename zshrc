@@ -40,6 +40,7 @@ function venv {
   source .venv/bin/activate
 }
 
+export TERM=xterm-256color
 
 # python
 export PYTHONDONTWRITEBYTECODE=1
