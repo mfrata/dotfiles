@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -x
 
 
 update-upgrade() {
@@ -50,8 +50,13 @@ curl-dl-file (){
 }
 
 
-install-sh() {
+install-sudosh() {
   sudo sh -c "$(curl-dl-content ${1})" $@
+}
+
+
+install-sh() {
+  sh -c "$(curl-dl-content ${1})" $@
 }
 
 
@@ -84,7 +89,7 @@ post-install-add() {
 }
 
 
-preprerequisites-install() {
+prerequisites-install() {
   cd && update-upgrade
 
   install-apt curl # Dl files or scritps' content
@@ -123,12 +128,6 @@ python-install() {
   # Upgrade pip to the latest version
   pip3 install --upgrade pip
 
-  # Python 3.9
-  # TODO this is asking for timezone on install blocking script
-  #repo ppa:deadsnakes/ppa && install-apt python3.9
-  #sudo mv /usr/bin/python /usr/bin/python2
-  #sudo ln -s /usr/bin/python3.9 /usr/bin/python
-
   install-pip pytest
   install-pip ipython
 }
@@ -143,7 +142,7 @@ scala-install() {
 
 rust-install() {
   # Installing cargo
-  install-sh https://sh.rustup.rs -y
+  install-sudosh https://sh.rustup.rs -y
 }
 
 
@@ -183,9 +182,7 @@ tools-install() {
   post-install-add "run_keybase"
 
   # KeypassXC - otp
-  KEYPASSXC_VERSION=2.6.4
-  curl-dl-file https://github.com/keepassxreboot/keepassxc/releases/download/$KEYPASSXC_VERSION/KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
-  install-appimage KeePassXC-$KEYPASSXC_VERSION-x86_64.AppImage
+  install-apt keepassxc
 
   TELEGRAM_VERSION=2.6.1
   curl-dl-file https://updates.tdesktop.com/tlinux/tsetup.$TELEGRAM_VERSION.tar.xz
@@ -194,17 +191,6 @@ tools-install() {
 
   # Libreoffice calc
   install-apt libreoffice-calc
-
-  # Joplin - my notes app
-  # TODO joplin install script still getting errors
-  # install-sh https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh
-}
-
-
-others-install() {
-  # Zoom -> Why!!?
-  curl-dl-file https://zoom.us/client/latest/zoom_amd64.deb
-  install-dpkg zoom_amd64.deb
 }
 
 
