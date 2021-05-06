@@ -12,20 +12,32 @@ reduce_image(){
   mogrify -resize 2400x3600\> -quality 80 -sampling-factor 4:2:0 $filename
 }
 
+exit_if_bitrate_is_less_than_60kbps(){
+  # Canon generates videos with 60kbps (full size video)
+  # Videos with less than this had already their size reduced
+  bitrate=$(ffmpeg -i $1 2>&1 |  grep bitrate | cut -d ' ' -f8)
+  if [[ ! "$bitrate" -gt "60000" ]]; then
+    echo "$1 already has file size reduced!"
+    exit 0;
+  fi
+}
+
 reduce_video(){
-  # tested on mp4
-  # source https://unix.stackexchange.com/a/38380
-  # other refs https://x265.readthedocs.io/en/master/cli.html
   local filename=$1
+  exit_if_bitrate_is_less_than_60kbps "$filename"
+
   local copy_filename=${filename}.copy
   mv $filename $copy_filename
+
+  # source https://unix.stackexchange.com/a/38380
+  # other refs https://guide.encode.moe/encoding/codecs/x264.html
+  # crf = 24 This provides a good balance between quality and filesize
   ffmpeg -n -loglevel error \
     -i $copy_filename \
-    -vcodec libx265 \
-      -crf 30 \
-      -x265-params log-level=0 \
+    -vcodec libx264 \
+      -crf 24 \
     $filename
-  # For some reason h265 is losing the metadata
+  # For some reason h264 is losing the metadata
   photo-copy-metadata-from-file-to-another $copy_filename $filename
   rm $copy_filename
 }
