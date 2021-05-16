@@ -58,15 +58,15 @@ reduce_files_size_on_dir() {
   local dir=$1
   export -f reduce_file_size
   # Be carefull with the recursion here!!!
-  ls $dir | xargs -I@ -P8 photo-reduce-file-size $dir/@
+  ls $dir | xargs -I@ photo-reduce-file-size $dir/@
 }
 
 main() {
   if [ -d $1 ]
   then
-    reduce_files_size_on_dir $1
+    reduce_files_size_on_dir $@
   else
-    reduce_file_size $1
+    reduce_file_size $@
   fi
 }
 
