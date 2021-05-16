@@ -13,6 +13,9 @@ reduce_image(){
 }
 
 exit_if_bitrate_is_less_than_60kbps(){
+  if [[ ! -z ${PHOTO_IGNORE_BITRATE_VALIDATION} ]]; then
+    return
+  fi
   # Canon generates videos with 60kbps (full size video)
   # Videos with less than this had already their size reduced
   bitrate=$(ffmpeg -i $1 2>&1 |  grep bitrate | cut -d ' ' -f8)
