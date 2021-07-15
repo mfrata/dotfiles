@@ -149,9 +149,10 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'sheerun/vim-polyglot'
 Plug 'ap/vim-css-color'
+Plug 'junegunn/goyo.vim'
 
 call plug#end()
 
 
 " Color scheme config
-colorscheme nord
+colorscheme gruvbox
