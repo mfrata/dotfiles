@@ -42,6 +42,9 @@ function venv {
   source .venv/bin/activate
 }
 
+# docker
+export DOCKER_BUILDKIT=1
+
 export TERM=xterm-256color
 
 # python
