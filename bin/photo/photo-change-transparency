@@ -1,0 +1,15 @@
+#!/bin/bash
+
+src_file=$1
+
+# 0 - 1.0
+transparency=${2-0.5}
+
+dst_file=${src_file%.jpg}.png
+
+convert ${src_file} \
+  -alpha set \
+  -background none \
+  -channel A \
+  -evaluate multiply ${transparency} \
+  +channel ${dst_file}
