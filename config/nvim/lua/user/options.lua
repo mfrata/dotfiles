@@ -14,8 +14,8 @@ local options = {
   diffopt = "vertical",                    -- Fugitive Gdiff vertical split
   inccommand = "split",                    -- Open buffer on search showing all results
   termguicolors = true,                    -- set term gui colors (most terminals support this)
-  -- completeopt = { "menuone", "noselect" }, -- mostly just for cmp
-  -- conceallevel = 0,                        -- so that `` is visible in markdown files
+  completeopt = { "menuone", "noselect" }, -- mostly just for cmp
+  conceallevel = 0,                        -- so that `` is visible in markdown files
 }
 
 for k, v in pairs(options) do
