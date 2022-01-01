@@ -273,7 +273,7 @@ terminal-install() {
   gsettings set org.gnome.desktop.default-applications.terminal exec 'alacritty'
 
   # Better grep
-  RG_VERSION=12.1.1
+  RG_VERSION=13.0.0
   curl-dl-file https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep_${RG_VERSION}_amd64.deb
   install-dpkg ripgrep_${RG_VERSION}_amd64.deb
 }
