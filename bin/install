@@ -267,10 +267,9 @@ terminal-install() {
   install-pip trash-cli # Safe rm
 
   # A good terminal (I liked that you can remove the top bar)
-  # TODO get newer version of allacritty
-  ALACRITTY_VERSION=v0.4.3
-  curl-dl-file https://github.com/alacritty/alacritty/releases/download/$ALACRITTY_VERSION/Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb
-  install-dpkg Alacritty-$ALACRITTY_VERSION-ubuntu_18_04_amd64.deb
+  install-apt cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  cargo install alacritty
   gsettings set org.gnome.desktop.default-applications.terminal exec 'alacritty'
 
   # Better grep
