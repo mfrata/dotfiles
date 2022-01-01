@@ -1,17 +1,15 @@
 .PHONY: install
 install:
-	mkdir -p ~/.config/alacritty
-	mkdir -p ~/.config/nvim
 	make link
 
 .PHONY: rm
 rm:
-	rm ~/.vimrc
-	rm ~/.zshrc
-	rm ~/.tmux.conf
-	rm ~/.gitconfig
-	rm ~/.config/nvim/init.vim
-	rm ~/.config/alacritty/alacritty.yml
+	rm -rf ~/.vimrc
+	rm -rf ~/.zshrc
+	rm -rf ~/.tmux.conf
+	rm -rf ~/.gitconfig
+	rm -rf ~/.config/nvim
+	rm -rf ~/.config/alacritty
 
 .PHONY: link
 link:
@@ -19,5 +17,5 @@ link:
 	ln -fs ~/.dotfiles/zshrc ~/.zshrc
 	ln -fs ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
 	ln -fs ~/.dotfiles/gitconfig ~/.gitconfig
-	ln -fs ~/.dotfiles/config/nvim/init.vim ~/.config/nvim/init.vim
-	ln -fs ~/.dotfiles/config/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
+	ln -fs ~/.dotfiles/config/nvim ~/.config/nvim
+	ln -fs ~/.dotfiles/config/alacritty ~/.config/alacritty
