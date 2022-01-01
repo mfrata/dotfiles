@@ -7,7 +7,7 @@ update-upgrade() {
 
 
 install-apt() {
-  sudo apt install -qq --no-install-recommends -f --yes $1
+  sudo apt install -qq --no-install-recommends -f --yes $@
 }
 
 
