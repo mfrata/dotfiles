@@ -36,6 +36,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 path+="$HOME/.local/bin"
 path+="$HOME/.cargo/bin"
 path+="$HOME/.dotfiles/bin/photo"
+path+="$HOME/.local/share/coursier/bin"
 
 function venv {
   [ ! -d .venv ] && python3 -m venv .venv

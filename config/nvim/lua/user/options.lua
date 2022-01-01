@@ -18,6 +18,8 @@ local options = {
   conceallevel = 0,                        -- so that `` is visible in markdown files
 }
 
+vim.opt_global.shortmess:remove("F")
+
 for k, v in pairs(options) do
   vim.opt[k] = v
 end

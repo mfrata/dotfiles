@@ -136,9 +136,13 @@ python-install() {
 
 
 scala-install() {
-  # TODO Sbt
-  # TODO Scala lang
-  echo
+  # metals
+  curl -fLo cs https://git.io/coursier-cli-"$(uname | tr LD ld)" && \
+    chmod +x cs && \
+    ./cs install cs && \
+    rm cs
+
+  cs setup
 }
 
 
