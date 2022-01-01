@@ -128,6 +128,10 @@ python-install() {
 
   install-pip pytest
   install-pip ipython
+  install-pip flake8
+  install-pip mypy
+  install-pip black
+  install-pip isort
 }
 
 
