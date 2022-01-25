@@ -55,3 +55,5 @@ alias pytest="pytest -p no:cacheprovider"
 GCP_INSTALL_PATH="$HOME/.local/google-cloud-sdk"
 [ -f "$GCP_INSTALL_PATH/path.zsh.inc" ] && . "$GCP_INSTALL_PATH/path.zsh.inc"
 [ -f "$GCP_INSTALL_PATH/completion.zsh.inc" ] && . "$GCP_INSTALL_PATH/completion.zsh.inc"
+
+eval $(thefuck --alias)
