@@ -88,6 +88,13 @@ vim.cmd [[
   let g:highlightedyank_highlight_duration = 300
 ]]
 
+vim.cmd [[
+  augroup lsp
+    au!
+    au FileType java,scala,sbt lua require("metals").initialize_or_attach({})
+  augroup end
+]]
+
 -- Install your plugins here
 return packer.startup(function(use)
   -- My plugins here
@@ -128,7 +135,6 @@ return packer.startup(function(use)
   use "williamboman/nvim-lsp-installer" -- simple to use language server installer
 
   -- scalameta
-  use "nvim-lua/plenary.nvim"
   use {'scalameta/nvim-metals', requires = { "nvim-lua/plenary.nvim" }}
 
 
