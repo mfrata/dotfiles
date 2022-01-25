@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+
+tags="$1"
+if [ -z $tags ]; then
+  tags="all"
+fi
+
+if ! [ -x "$(command -v ansible)" ]; then
+  sudo apt update && sudo apt install ansible --no-install-recommends -y
+fi
+
+ansible-playbook -i ~/.dotfiles/hosts ~/.dotfiles/main.yml --ask-become-pass --tags $tags
