@@ -1,0 +1,5 @@
+- name: Set up local workstation
+  hosts: local
+
+- name: Include a play after another play
+  include: roles/terminal/main.yml

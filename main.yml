@@ -1,5 +1,0 @@
-- name: Set up local workstation
-  hosts: local
-  tasks:
-    - name: test echo
-      command: echo hi
