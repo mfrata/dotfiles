@@ -1,0 +1,10 @@
+- name: Install tmux
+  become: true
+  apt:
+    name: tmux
+
+- name: Symlink tmux config
+  file:
+    src: "${HOME}/.dotfiles/tmux/tmux.conf"
+    dest: "${HOME}/.tmux.conf"
+    state: link

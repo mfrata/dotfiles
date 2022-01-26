@@ -1,0 +1,24 @@
+- name: Install zsh
+  become: true
+  apt:
+    name: zsh
+
+- name: Install oh-my-zsh
+  git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: ${HOME}/.oh-my-zsh
+
+- name: Install pure
+  git:
+    repo: https://github.com/sindresorhus/pure.git
+    dest: ${HOME}/.zsh/pure
+
+- name: Change shell
+  become: true
+  command: chsh -s /bin/zsh
+
+- name: Symlink zshrc
+  file:
+    src: "${HOME}/.dotfiles/zshrc"
+    dest: "${HOME}/.zshrc"
+    state: link

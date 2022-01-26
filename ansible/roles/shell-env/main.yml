@@ -1,0 +1,17 @@
+- name: Set up terminal packages
+  hosts: local
+  tasks:
+    - name: Crate config dir
+      file:
+        path: "${HOME}/.config"
+        state: directory
+    - name: zsh
+      include_tasks: tasks/zsh.yml
+    - name: tmux
+      include_tasks: tasks/tmux.yml
+    - name: fzf
+      include_tasks: tasks/fzf.yml
+    - name: neovim
+      include_tasks: tasks/neovim.yml
+    - name: utils
+      include_tasks: tasks/utils.yml

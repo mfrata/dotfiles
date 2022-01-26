@@ -9,7 +9,8 @@ RUN  echo "${USER}:password" | chpasswd
 RUN apt update && apt install -y --no-install-recommends \
   sudo \
   git \
-  ansible
+  ansible \
+  python3-apt
 
 USER ${USER}
 WORKDIR /home/${USER}

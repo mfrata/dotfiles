@@ -1,5 +1,10 @@
-build:
-	docker build -t test-ubuntu:latest ansible
+project := test-dotfiles-ansible
 
-check:
-	docker run --rm -it -v $(shell pwd):/home/mfrata/.dotfiles test-ubuntu:latest bash /home/mfrata/.dotfiles/bin/install
+build:
+	docker build -t $(project):latest ansible
+
+shell:
+	docker run --rm -it \
+		-v $(shell pwd):/home/mfrata/.dotfiles \
+		$(project) \
+			bash -c "~/.dotfiles/bin/install && bash"

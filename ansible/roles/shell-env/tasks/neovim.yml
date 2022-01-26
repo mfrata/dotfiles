@@ -1,0 +1,20 @@
+- name: Install neovim
+  become: true
+  unarchive:
+    src: https://github.com/neovim/neovim/releases/download/nightly/nvim-linux64.tar.gz
+    dest: /usr/local
+    remote_src: yes
+    extra_opts:
+    - "--strip-components"
+    - "1"
+
+- name: Create config
+  file:
+    path: "${HOME}/.config"
+    state: directory
+
+- name: Symlink neovim config
+  file:
+    src: "${HOME}/.dotfiles/config/nvim"
+    dest: "${HOME}/.config/nvim"
+    state: link

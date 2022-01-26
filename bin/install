@@ -10,4 +10,4 @@ if ! [ -x "$(command -v ansible)" ]; then
   sudo apt update && sudo apt install ansible --no-install-recommends -y
 fi
 
-ansible-playbook -i ~/.dotfiles/ansible/hosts ~/.dotfiles/ansible/main.yml --ask-become-pass --tags $tags
+ansible-playbook -i ~/.dotfiles/ansible/hosts ~/.dotfiles/ansible/main.yml --tags $tags
