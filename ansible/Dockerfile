@@ -10,7 +10,7 @@ RUN apt update && apt install -y --no-install-recommends \
   sudo \
   git \
   ansible \
-  python3-apt
+  python3-apt python3-setuptools python3-pip
 
 USER ${USER}
 WORKDIR /home/${USER}
