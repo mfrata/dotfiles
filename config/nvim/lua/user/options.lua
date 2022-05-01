@@ -16,6 +16,7 @@ local options = {
   termguicolors = true,                    -- set term gui colors (most terminals support this)
   completeopt = { "menuone", "noselect" }, -- mostly just for cmp
   conceallevel = 0,                        -- so that `` is visible in markdown files
+  clipboard = 'unnamedplus'                -- copy/paste to system clipboard
 }
 
 vim.opt_global.shortmess:remove("F")
