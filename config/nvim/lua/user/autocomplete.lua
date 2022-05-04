@@ -122,7 +122,7 @@ cmp.setup {
     select = false,
   },
   window = {
-    documentation = "native"
+    documentation = cmp.config.window.bordered()
   },
   experimental = {
     ghost_text = false,
