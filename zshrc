@@ -3,7 +3,7 @@ export ZSH="$HOME/.oh-my-zsh"
 
 HIST_STAMPS="mm/dd/yyyy"
 
-plugins=(git)
+plugins=(git asdf)
 
 source $ZSH/oh-my-zsh.sh
 

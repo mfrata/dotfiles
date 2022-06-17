@@ -1,6 +1,7 @@
 from ubuntu:latest
 
 ARG USER=mfrata
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN useradd -rm -d /home/${USER} -s /bin/bash -g root -G sudo -u 1000 ${USER}
 

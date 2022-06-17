@@ -1,5 +1,4 @@
-- name: Set up local workstation
-  hosts: local
-
-- name: Include a play after another play
-  include: roles/shell-env/main.yml
+---
+- hosts: local
+  roles:
+    - role: roles/shell-env/

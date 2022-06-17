@@ -18,4 +18,3 @@
   whereiam = rev-parse --abbrev-ref HEAD
   upstream = rev-parse --abbrev-ref --symbolic-full-name @{u}
   restore = "!git checkout $(git upstream) -- #@"
-

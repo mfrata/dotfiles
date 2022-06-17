@@ -1,0 +1,5 @@
+- name: Set up dev packages
+  hosts: local
+  tasks:
+    - name: asdf (languages)
+      include_tasks: tasks/asdf.yml

@@ -1,0 +1,11 @@
+- name: Clone asdf
+  git:
+    repo: https://github.com/asdf-vm/asdf.git
+    dest: ${HOME}/.asdf
+
+
+- name: Add rust plugin
+  command: ~/.asdf/bin/asdf plugin update rust https://github.com/asdf-community/asdf-rust.git
+
+- name: Install rust
+  command: ~/.asdf/bin/asdf install rust latest

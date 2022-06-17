@@ -7,4 +7,4 @@ shell:
 	docker run --rm -it \
 		-v $(shell pwd):/home/mfrata/.dotfiles \
 		$(project) \
-			bash -c "~/.dotfiles/bin/install && bash"
+			bash -c "cd ansible/ && ../bin/install && bash"
