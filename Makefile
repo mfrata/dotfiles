@@ -1,21 +1,40 @@
-.PHONY: install
-install:
-	make link
+.DEFAULT_GOAL = install
+
+# recursive and force
+RMFILE := rm -rf
+
+# force and symbolic
+LINK := ln -fs
+
+# create intermediary dirs
+MKDIR := mkdir -p
+
+CLONE := git clone --quiet https://github.com/$(repo)
+
 
 .PHONY: rm
 rm:
-	rm -rf ~/.vimrc
-	rm -rf ~/.zshrc
-	rm -rf ~/.tmux.conf
-	rm -rf ~/.gitconfig
-	rm -rf ~/.config/nvim
-	rm -rf ~/.config/alacritty
+	$(RMFILE) ~/.vimrc
+	$(RMFILE) ~/.zshrc
+	$(RMFILE) ~/.tmux.conf
+	$(RMFILE) ~/.gitconfig
+	$(RMFILE) ~/.config/nvim
+	$(RMFILE) ~/.config/alacritty
 
-.PHONY: link
+mkdirs:
+	$(MKDIR) ~/.config
+	$(MKDIR) ~/.zsh
+
 link:
-	ln -fs ~/.dotfiles/vimrc ~/.vimrc
-	ln -fs ~/.dotfiles/zshrc ~/.zshrc
-	ln -fs ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
-	ln -fs ~/.dotfiles/gitconfig ~/.gitconfig
-	ln -fs ~/.dotfiles/config/nvim ~/.config/nvim
-	ln -fs ~/.dotfiles/config/alacritty ~/.config/alacritty
+	$(LINK) ~/.dotfiles/vimrc ~/.vimrc
+	$(LINK) ~/.dotfiles/zshrc ~/.zshrc
+	$(LINK) ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
+	$(LINK) ~/.dotfiles/gitconfig ~/.gitconfig
+	$(LINK) ~/.dotfiles/config/nvim ~/.config/nvim
+	$(LINK) ~/.dotfiles/config/alacritty ~/.config/alacritty
+
+
+.PHONY: install
+install: mkdirs link
+	$(CLONE)sindresorhus/pure ~/.zsh/pure
+	$(CLONE)ohmyzsh/ohmyzsh ~/.oh-my-zsh
