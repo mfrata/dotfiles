@@ -48,6 +48,10 @@ function venv {
 
 # docker
 export DOCKER_BUILDKIT=1
+if [ "$(uname -m)" = "arm64" ]
+then
+  export DOCKER_DEFAULT_PLATFORM=linux/arm64
+fi
 
 export TERM=xterm-256color
 
