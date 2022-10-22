@@ -7,7 +7,6 @@ local dashboard = require("alpha.themes.dashboard")
 
 dashboard.section.buttons.val = {
 	dashboard.button("n", "New file", ":ene <BAR> startinsert <CR>"),
-	dashboard.button("p", "Planning", ":e ~/Documents/self/planning/week.md <CR>"),
 	dashboard.button("c", "Configuration", ":e ~/.dotfiles/config/nvim <CR>"),
 	dashboard.button("q", "Quit Neovim", ":qa<CR>"),
 }
