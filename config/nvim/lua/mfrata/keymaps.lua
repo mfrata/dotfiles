@@ -9,3 +9,5 @@ vim.g.mapleader = ","
 keymap("n", "<leader><leader>", ":Telescope find_files<cr>", opts)
 keymap("n", "<leader><Enter>", ":Telescope buffers<cr>", opts)
 keymap("n", "<leader>r", ":Telescope live_grep<cr>", opts)
+
+keymap("n", "<leader>gs", vim.cmd.Git)
