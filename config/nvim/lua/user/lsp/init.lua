@@ -4,13 +4,11 @@ lsp.preset("recommended")
 
 lsp.ensure_installed({
   'pyright',
-  'lua_lsp',
-  'rust_analyzer',
-  'terraform_lsp',
+  'lua_ls',
 })
 
 -- Fix Undefined global 'vim'
-lsp.configure('sumneko_lua', {
+lsp.configure('lua_ls', {
     settings = {
         Lua = {
             diagnostics = {
