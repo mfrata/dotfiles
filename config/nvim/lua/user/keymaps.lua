@@ -27,3 +27,7 @@ keymap("n", "J", "mzJ`z", opts)
 -- Maintain cursor at the center when using C-d C-u
 keymap("n", "<C-d>", "<C-d>zz", opts)
 keymap("n", "<C-u>", "<C-u>zz", opts)
+
+-- Search terms are kept in the middle
+keymap("n", "n", "nzzzv", opts)
+keymap("n", "N", "Nzzzv", opts)
