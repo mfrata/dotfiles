@@ -1,13 +1,14 @@
 local options = {
   showcmd = true,                          -- Show me what I'm typing
   number = true,                           -- Show line numbers
+  relativenumber = true,                   -- Show relative too
   swapfile = false,                        -- Don't create annoying backup files
   incsearch = true,                        -- Shows the match while typing
   hlsearch = true,                         -- Highlight found searches
   ignorecase = true,                       -- Search case insensitive...
   smartcase = true,                        -- ... but not if begins with upper case
-  tabstop = 2,                             -- tabs = 2 columns
-  shiftwidth = 2,                          -- 2 columns identation keys
+  tabstop = 4,                             -- tabs = X columns
+  shiftwidth = 4,                          -- X columns identation keys
   expandtab = true,                        -- tabs = spaces (youtube.com/watch?v=SsoOG6ZeyUI)
   laststatus = 2,                          -- Used by lightline
   shell = "zsh",                           -- Oh my sweet shell
