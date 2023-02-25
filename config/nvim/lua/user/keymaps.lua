@@ -31,3 +31,8 @@ keymap("n", "<C-u>", "<C-u>zz", opts)
 -- Search terms are kept in the middle
 keymap("n", "n", "nzzzv", opts)
 keymap("n", "N", "Nzzzv", opts)
+
+-- Paste/delete without losing clipboard
+keymap("x", "<S-p>", [["_dP]], opts)
+keymap("n", "<S-d>", [["_d]], opts)
+keymap("v", "<S-d>", [["_d]], opts)
