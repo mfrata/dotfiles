@@ -16,4 +16,7 @@ keymap("n", "<leader>x", ":registers<cr>", opts)
 keymap("n", "<leader>t", ":terminal<cr>", opts)
 keymap("n", "<C-l>", ":nohlsearch<cr><C-l>", opts)
 keymap("n", "<S-y>", "\"+y<cr>", opts)
-keymap("n", "<leader>f", ":call fzf#vim#tags(\"\'\".expand(\'<cword>\'))<cr>", opts)
+
+-- Move selected chunk up and down
+keymap("v", "J", ":m '>+1<CR>gv=gv", opts)
+keymap("v", "K", ":m '<-2<CR>gv=gv", opts)
