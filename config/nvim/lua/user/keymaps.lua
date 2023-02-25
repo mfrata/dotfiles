@@ -20,3 +20,6 @@ keymap("n", "<S-y>", "\"+y<cr>", opts)
 -- Move selected chunk up and down
 keymap("v", "J", ":m '>+1<CR>gv=gv", opts)
 keymap("v", "K", ":m '<-2<CR>gv=gv", opts)
+
+-- Maintain cursor where it is when use J
+keymap("n", "J", "mzJ`z", opts)
