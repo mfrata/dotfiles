@@ -16,8 +16,7 @@ local options = {
   inccommand = "split",                    -- Open buffer on search showing all results
   termguicolors = true,                    -- set term gui colors (most terminals support this)
   completeopt = { "menuone", "noselect" }, -- mostly just for cmp
-  conceallevel = 0,                        -- so that `` is visible in markdown files
-  clipboard = 'unnamedplus'                -- copy/paste to system clipboard
+  conceallevel = 0                         -- so that `` is visible in markdown files
 }
 
 vim.opt_global.shortmess:remove("F")

@@ -15,7 +15,6 @@ keymap("n", "<C-t>", ":NERDTreeToggle<cr>", opts)
 keymap("n", "<leader>x", ":registers<cr>", opts)
 keymap("n", "<leader>t", ":terminal<cr>", opts)
 keymap("n", "<C-l>", ":nohlsearch<cr><C-l>", opts)
-keymap("n", "<S-y>", "\"+y<cr>", opts)
 
 -- Move selected chunk up and down
 keymap("v", "J", ":m '>+1<CR>gv=gv", opts)
@@ -36,3 +35,7 @@ keymap("n", "N", "Nzzzv", opts)
 keymap("x", "<S-p>", [["_dP]], opts)
 keymap("n", "<S-d>", [["_d]], opts)
 keymap("v", "<S-d>", [["_d]], opts)
+
+-- Yank to system clipboard
+keymap("n", "<S-y>", [["+y]], opts)
+keymap("v", "<S-y>", [["+y]], opts)
