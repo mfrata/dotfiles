@@ -23,3 +23,7 @@ keymap("v", "K", ":m '<-2<CR>gv=gv", opts)
 
 -- Maintain cursor where it is when use J
 keymap("n", "J", "mzJ`z", opts)
+
+-- Maintain cursor at the center when using C-d C-u
+keymap("n", "<C-d>", "<C-d>zz", opts)
+keymap("n", "<C-u>", "<C-u>zz", opts)
