@@ -5,5 +5,4 @@ window:
   padding:
     x: 5
     y: 5
-  decorations: none
   opacity: 0.98
