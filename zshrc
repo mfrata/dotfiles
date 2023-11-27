@@ -39,10 +39,13 @@ path+="$HOME/.dotfiles/bin/photo"
 path+="$HOME/.local/share/coursier/bin"
 path+="/opt/homebrew/bin"
 path+="$HOME/Library/Python/3.8/bin"
+path+="$HOME/Library/Python/3.10/bin"
+path+="$HOME/Library/Python/3.11/bin"
 path+="$HOME/Library/Application Support/Coursier/bin"
 
 function venv {
-  [ ! -d .venv ] && python3 -m venv .venv
+  PYTHON_VERSION=${1-3}
+  [ ! -d .venv ] && python${PYTHON_VERSION} -m venv .venv && .venv/bin/pip install --upgrade pip
   source .venv/bin/activate
 }
 
@@ -64,3 +67,7 @@ GCP_INSTALL_PATH="$HOME/.local/google-cloud-sdk"
 [ -f "$GCP_INSTALL_PATH/completion.zsh.inc" ] && . "$GCP_INSTALL_PATH/completion.zsh.inc"
 
 eval $(thefuck --alias)
+
+autoload -Uz compinit
+zstyle ':completion:*' menu select
+fpath+=~/.zfunc
