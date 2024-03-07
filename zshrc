@@ -38,7 +38,7 @@ path+="$HOME/.cargo/bin"
 path+="$HOME/.dotfiles/bin/photo"
 path+="$HOME/.local/share/coursier/bin"
 path+="/opt/homebrew/bin"
-path+="$HOME/Library/Python/3.8/bin"
+path+="$HOME/Library/Python/3.9/bin"
 path+="$HOME/Library/Application Support/Coursier/bin"
 
 function venv {

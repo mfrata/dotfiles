@@ -111,6 +111,7 @@ return packer.startup(function(use)
   use "machakann/vim-highlightedyank"
   use "sheerun/vim-polyglot"
   use "ap/vim-css-color"
+  use "godlygeek/tabular"
   use "junegunn/goyo.vim"
   use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
 
@@ -137,6 +138,17 @@ return packer.startup(function(use)
 	  }
   }
 
+  use({
+    "jackMort/ChatGPT.nvim",
+      config = function()
+        require("chatgpt").setup()
+      end,
+      requires = {
+        "MunifTanjim/nui.nvim",
+        "nvim-lua/plenary.nvim",
+        "nvim-telescope/telescope.nvim"
+      }
+  })
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then
