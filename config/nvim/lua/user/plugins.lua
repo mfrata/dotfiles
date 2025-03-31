@@ -137,6 +137,27 @@ return packer.startup(function(use)
 	  }
   }
 
+  use {
+    'yetone/avante.nvim',
+    branch = 'main',
+    run = 'make',
+    provider = 'openai',
+    requires = {
+      {'nvim-treesitter/nvim-treesitter'},
+      {'stevearc/dressing.nvim'},
+      {'nvim-lua/plenary.nvim'},
+      {'MunifTanjim/nui.nvim'},
+      {'MeanderingProgrammer/render-markdown.nvim'},
+      {'hrsh7th/nvim-cmp'},
+      {'nvim-tree/nvim-web-devicons'},
+      {'HakonHarnes/img-clip.nvim'},
+      {'zbirenbaum/copilot.lua'},
+    },
+    config = function()
+      require('avante').setup()
+    end
+  }
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then
