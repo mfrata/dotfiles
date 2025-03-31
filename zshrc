@@ -41,7 +41,7 @@ path+="/opt/homebrew/bin"
 path+="$HOME/Library/Application Support/Coursier/bin"
 
 function venv {
-  [ ! -d .venv ] && python$1 -m venv .venv
+  [ ! -d .venv ] && python$1 -m venv .venv && .venv/bin/pip install --upgrade pip uv
   source .venv/bin/activate
 }
 
