@@ -1,0 +1,11 @@
+[window]
+decorations = "none"
+opacity = 0.98
+
+[window.dimensions]
+columns = 140
+lines = 38
+
+[window.padding]
+x = 5
+y = 5
