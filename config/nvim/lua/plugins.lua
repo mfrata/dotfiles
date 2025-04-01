@@ -95,19 +95,27 @@ vim.cmd [[
   augroup end
 ]]
 
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "Avante",
+	callback = function()
+		vim.api.nvim_set_hl(0, "AvanteSidebarNormal", { link = "Normal" })
+		vim.api.nvim_set_hl(0, "AvanteSidebarWinSeparator", { link = "WinSeparator" })
+
+		local normal_bg = string.format("#%06x", vim.api.nvim_get_hl(0, { name = "Normal" }).bg)
+		vim.api.nvim_set_hl(0, "AvanteSidebarWinHorizontalSeparator", { fg = normal_bg })
+	end,
+})
+
 -- Install your plugins here
 return packer.startup(function(use)
   -- My plugins here
   use "wbthomason/packer.nvim" -- Have packer manage itself
-  use "nvim-lua/popup.nvim" -- An implementation of the Popup API from vim in Neovim
   use {"junegunn/fzf", dir = "~/.fzf", run = "yes | ./install" }
-  use "junegunn/fzf.vim"
   use "itchyny/lightline.vim"
   use "scrooloose/nerdtree"
   use "tpope/vim-surround"
   use "tpope/vim-fugitive"
   use "morhetz/gruvbox"
-  use "arcticicestudio/nord-vim"
   use "machakann/vim-highlightedyank"
   use "sheerun/vim-polyglot"
   use "ap/vim-css-color"
@@ -115,39 +123,51 @@ return packer.startup(function(use)
   use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
 
   use {
-	  'VonHeikemen/lsp-zero.nvim',
-	  branch = 'v1.x',
-	  requires = {
-		  -- LSP Support
-		  {'neovim/nvim-lspconfig'},
-		  {'williamboman/mason.nvim'},
-		  {'williamboman/mason-lspconfig.nvim'},
+      'VonHeikemen/lsp-zero.nvim',
+      branch = 'v1.x',
+      requires = {
+    	  -- LSP Support
+    	  {'neovim/nvim-lspconfig'},
+    	  {'williamboman/mason.nvim'},
+    	  {'williamboman/mason-lspconfig.nvim'},
 
-		  -- Autocompletion
-		  {'hrsh7th/nvim-cmp'},
-		  {'hrsh7th/cmp-buffer'},
-		  {'hrsh7th/cmp-path'},
-		  {'saadparwaiz1/cmp_luasnip'},
-		  {'hrsh7th/cmp-nvim-lsp'},
-		  {'hrsh7th/cmp-nvim-lua'},
+    	  -- Autocompletion
+    	  {'hrsh7th/nvim-cmp'},
+    	  {'hrsh7th/cmp-buffer'},
+    	  {'hrsh7th/cmp-path'},
+    	  {'saadparwaiz1/cmp_luasnip'},
+    	  {'hrsh7th/cmp-nvim-lsp'},
+    	  {'hrsh7th/cmp-nvim-lua'},
 
-		  -- Snippets
-		  {'L3MON4D3/LuaSnip'},
-		  {'rafamadriz/friendly-snippets'},
-	  }
+    	  -- Snippets
+    	  {'L3MON4D3/LuaSnip'},
+    	  {'rafamadriz/friendly-snippets'},
+      }
   }
 
   use {
     'yetone/avante.nvim',
     branch = 'main',
     run = 'make',
-    provider = 'openai',
+    opts = {
+      provider = 'openai',
+      openai = {
+        model = "gpt-4o",
+        temperature = 0,
+      },
+    },
     requires = {
       {'nvim-treesitter/nvim-treesitter'},
       {'stevearc/dressing.nvim'},
       {'nvim-lua/plenary.nvim'},
       {'MunifTanjim/nui.nvim'},
-      {'MeanderingProgrammer/render-markdown.nvim'},
+      {
+        'MeanderingProgrammer/render-markdown.nvim',
+        opts = {
+          file_types = { "markdown", "Avante" },
+        },
+        ft = { "markdown", "Avante" },
+      },
       {'hrsh7th/nvim-cmp'},
       {'nvim-tree/nvim-web-devicons'},
       {'HakonHarnes/img-clip.nvim'},
